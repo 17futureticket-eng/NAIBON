@@ -113,9 +113,15 @@ export default function Navbar() {
           {/* Logo — flush left, no auto-margin pushing it */}
           <Link href="/" aria-label="LUMA home" style={{ display: "flex", alignItems: "center", gap: "0.5rem", textDecoration: "none", flexShrink: 0, marginRight: "0.5rem" }}>
             <LogoMark size={32} />
-            <span style={{ lineHeight: 1, display: "flex", alignItems: "baseline" }}>
-              <span style={{ fontFamily: "var(--font-sans)", fontWeight: 800, fontSize: "1.0625rem", letterSpacing: "-0.04em", color: "var(--ink)" }}>LU</span>
-              <span style={{ fontFamily: "var(--font-sans)", fontWeight: 300, fontSize: "1.0625rem", letterSpacing: "-0.04em", color: "var(--ink-60)" }}>MA</span>
+            <span style={{
+              fontFamily: "var(--font-logo)",
+              fontWeight: 700,
+              fontSize: "1.25rem",
+              letterSpacing: "-0.06em",
+              color: "var(--ink)",
+              lineHeight: 1,
+            }}>
+              LUMA
             </span>
           </Link>
 
@@ -197,9 +203,15 @@ export default function Navbar() {
         <div style={{ height: "var(--nav-h)", display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 1.25rem", borderBottom: "1px solid var(--ink-10)", flexShrink: 0 }}>
           <Link href="/" onClick={() => setMenuOpen(false)} style={{ display: "flex", alignItems: "center", gap: "0.5rem", textDecoration: "none" }}>
             <LogoMark size={28} />
-            <span style={{ lineHeight: 1, display: "flex", alignItems: "baseline" }}>
-              <span style={{ fontFamily: "var(--font-sans)", fontWeight: 800, fontSize: "1.0625rem", letterSpacing: "-0.04em", color: "var(--ink)" }}>LU</span>
-              <span style={{ fontFamily: "var(--font-sans)", fontWeight: 300, fontSize: "1.0625rem", letterSpacing: "-0.04em", color: "var(--ink-60)" }}>MA</span>
+            <span style={{
+              fontFamily: "var(--font-logo)",
+              fontWeight: 700,
+              fontSize: "1.25rem",
+              letterSpacing: "-0.06em",
+              color: "var(--ink)",
+              lineHeight: 1,
+            }}>
+              LUMA
             </span>
           </Link>
           <button onClick={() => setMenuOpen(false)} aria-label="Close menu" style={{ background: "none", border: "none", cursor: "pointer", padding: "4px" }}>

@@ -40,6 +40,7 @@
   --font-display: var(--font-playfair), Georgia, "Times New Roman", serif;
   --font-sans:    var(--font-inter), system-ui, -apple-system, sans-serif;
   --font-mono:    var(--font-jetbrains), "Courier New", monospace;
+  --font-logo:    var(--font-space), system-ui, sans-serif;
 
   /* Spacing scale */
   --announce-h:   0px;
