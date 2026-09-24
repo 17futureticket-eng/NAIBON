@@ -519,20 +519,8 @@ export default function LaunchClient() {
     <div style={{ minHeight: "100vh", background: "var(--ivory)" }}>
       <Navbar />
       <main style={{ paddingTop: "var(--nav-h)" }}>
-        {/* Breadcrumb + step meta */}
-        <div className="container-wide" style={{ paddingTop: "1rem", paddingBottom: "0" }}>
-          <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", flexWrap: "wrap", gap: "0.375rem" }}>
-            <nav aria-label="Breadcrumb">
-              <span className="breadcrumb">~/markets · launch · <span>step {step}/03</span></span>
-            </nav>
-            <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.475rem", letterSpacing: "0.08em", color: "var(--ink-30)", textAlign: "right" }}>
-              permissionless · 0g-galileo
-            </span>
-          </div>
-        </div>
-
         {/* Step bar */}
-        <div className="container-wide" style={{ paddingTop: "0.75rem", paddingBottom: "0" }}>
+        <div className="container-wide" style={{ paddingTop: "1.25rem", paddingBottom: "0" }}>
           <div style={{ border: "1px solid var(--ink-10)", borderRadius: "3px 3px 0 0", overflow: "hidden" }}>
             <StepBar step={step} />
           </div>
