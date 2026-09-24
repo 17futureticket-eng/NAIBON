@@ -12,26 +12,37 @@ import {
 
 /* ─── Step indicator ─── */
 function StepBar({ step }: { step: LaunchStep }) {
-  const steps: { num: LaunchStep; label: string }[] = [
-    { num: 1, label: "IDENTITY" },
-    { num: 2, label: "REVIEW + MINT" },
-    { num: 3, label: "GO LIVE" },
+  const steps: { num: LaunchStep; label: string; short: string }[] = [
+    { num: 1, label: "IDENTITY",     short: "IDENTITY" },
+    { num: 2, label: "REVIEW + MINT", short: "REVIEW" },
+    { num: 3, label: "GO LIVE",       short: "GO LIVE" },
   ];
   return (
-    <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", borderBottom: "1px solid var(--ink-10)" }}>
-      {steps.map((s) => {
-        const isActive = s.num === step;
-        const isDone   = s.num < step;
-        return (
-          <div key={s.num} className={`step-tab ${isActive ? "step-tab-active" : isDone ? "step-tab-done" : ""}`}>
-            <span className={`step-num ${isActive ? "step-num-active" : isDone ? "step-num-done" : "step-num-pending"}`}>
-              {String(s.num).padStart(2, "0")}
-            </span>
-            {s.label}
-          </div>
-        );
-      })}
-    </div>
+    <>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", borderBottom: "1px solid var(--ink-10)" }}>
+        {steps.map((s) => {
+          const isActive = s.num === step;
+          const isDone   = s.num < step;
+          return (
+            <div key={s.num} className={`step-tab ${isActive ? "step-tab-active" : isDone ? "step-tab-done" : ""}`} style={{ padding: "0.875rem 0.75rem", gap: "0.5rem", minWidth: 0 }}>
+              <span className={`step-num ${isActive ? "step-num-active" : isDone ? "step-num-done" : "step-num-pending"}`} style={{ flexShrink: 0 }}>
+                {String(s.num).padStart(2, "0")}
+              </span>
+              <span className="step-label-full" style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{s.label}</span>
+              <span className="step-label-short" style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{s.short}</span>
+            </div>
+          );
+        })}
+      </div>
+      <style>{`
+        .step-label-short { display: none; }
+        @media (max-width: 480px) {
+          .step-label-full  { display: none; }
+          .step-label-short { display: block; }
+          .step-tab { padding: 0.75rem 0.5rem !important; font-size: 0.5rem !important; }
+        }
+      `}</style>
+    </>
   );
 }
 
@@ -302,13 +313,13 @@ function Step1({
       </div>
 
       {/* Footer */}
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", paddingTop: "1rem", borderTop: "1px solid var(--ink-10)" }}>
-        <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.5rem", letterSpacing: "0.1em", color: "var(--ink-30)" }}>
-          changes auto-saved to local draft · hash recomputes on every edit
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", paddingTop: "1rem", borderTop: "1px solid var(--ink-10)", flexWrap: "wrap", gap: "0.625rem" }}>
+        <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.475rem", letterSpacing: "0.08em", color: "var(--ink-30)" }}>
+          auto-saved · hash recomputes on every edit
         </span>
-        <div style={{ display: "flex", gap: "0.75rem", alignItems: "center" }}>
+        <div style={{ display: "flex", gap: "0.625rem", alignItems: "center", flexWrap: "wrap" }}>
           <Link href="/markets" className="btn btn-ghost" style={{ fontSize: "0.8125rem", padding: "0.625rem 1rem" }}>
-            esc · cancel
+            cancel
           </Link>
           <button
             className="btn btn-primary"
@@ -510,13 +521,12 @@ export default function LaunchClient() {
       <main style={{ paddingTop: "var(--nav-h)" }}>
         {/* Breadcrumb + step meta */}
         <div className="container-wide" style={{ paddingTop: "1rem", paddingBottom: "0" }}>
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "0.5rem" }}>
+          <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", flexWrap: "wrap", gap: "0.375rem" }}>
             <nav aria-label="Breadcrumb">
-              <span className="breadcrumb">~/markets · launch · <span>step {step}/03 · identity + brain</span></span>
+              <span className="breadcrumb">~/markets · launch · <span>step {step}/03</span></span>
             </nav>
-            <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.5rem", letterSpacing: "0.1em", color: "var(--ink-30)" }}>
-              permissionless · 0g-galileo · agent nft{" "}
-              {launchResult?.inftTokenId ?? (draft.ticker ? `[pending · ${draft.ticker}]` : "[pending]")}
+            <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.475rem", letterSpacing: "0.08em", color: "var(--ink-30)", textAlign: "right" }}>
+              permissionless · 0g-galileo
             </span>
           </div>
         </div>
@@ -557,6 +567,9 @@ export default function LaunchClient() {
         }
         @media (max-width: 1023px) {
           .launch-manifest { border-top: 1px solid var(--ink-10); }
+        }
+        @media (max-width: 640px) {
+          .launch-form { padding: 1.25rem 1rem !important; }
         }
       `}</style>
     </div>

@@ -403,7 +403,7 @@ export default function MarketsClient() {
         <div style={{ maxWidth: "1440px", margin: "0 auto", padding: "0 clamp(1rem, 3vw, 2.5rem)" }}>
 
           {/* ── Page header ── */}
-          <div style={{ padding: "2rem 0 1.5rem", display: "flex", alignItems: "flex-end", justifyContent: "space-between", flexWrap: "wrap", gap: "1rem" }}>
+          <div style={{ padding: "2rem 0 1.5rem", display: "flex", alignItems: "flex-end", justifyContent: "space-between", flexWrap: "wrap", gap: "1rem" }} className="markets-page-header">
             <div>
               <span style={{
                 fontFamily: "var(--font-mono)", fontSize: "0.5rem", letterSpacing: "0.18em",
@@ -419,7 +419,7 @@ export default function MarketsClient() {
                 Agent Market Index
               </h1>
             </div>
-            <div style={{ display: "flex", gap: "0.625rem", flexWrap: "wrap" }}>
+            <div style={{ display: "flex", gap: "0.625rem", flexWrap: "wrap" }} className="header-btns">
               <Link href="/launch" className="btn btn-ghost" style={{ fontSize: "0.8125rem", padding: "0.5rem 1rem" }}>
                 + Launch agent
               </Link>
@@ -441,7 +441,7 @@ export default function MarketsClient() {
           <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: "1.25rem", alignItems: "start" }} className="dashboard-grid">
 
             {/* ── LEFT: Agent table dashboard ── */}
-            <div>
+            <div className="table-col">
               <div style={{
                 background: "var(--ivory)",
                 border: "1px solid var(--ink-10)",
@@ -472,7 +472,7 @@ export default function MarketsClient() {
                   </div>
 
                   {/* Filter tabs */}
-                  <div style={{ display: "flex", gap: "0.25rem", background: "rgba(10,14,26,0.04)", padding: "0.2rem", borderRadius: "6px", border: "1px solid var(--ink-10)" }}>
+                  <div className="filter-pill-group" style={{ display: "flex", gap: "0.25rem", background: "rgba(10,14,26,0.04)", padding: "0.2rem", borderRadius: "6px", border: "1px solid var(--ink-10)", flexWrap: "wrap" }}>
                     {(["all", "hermes", "raw", "ipo-open"] as Filter[]).map((f) => (
                       <button
                         key={f}
@@ -604,7 +604,7 @@ export default function MarketsClient() {
             </div>
 
             {/* ── RIGHT: Earn widget ── */}
-            <div>
+            <div className="earn-sidebar">
               <div style={{ position: "sticky", top: "calc(var(--nav-h) + 1.25rem)", display: "flex", flexDirection: "column", gap: "0.625rem" }}>
                 <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.4375rem", letterSpacing: "0.16em", textTransform: "uppercase", color: "var(--ink-30)" }}>HOW YOU EARN FROM AN AGENT</span>
                 <EarnWidget />
@@ -642,6 +642,11 @@ export default function MarketsClient() {
         @media (min-width: 1100px) {
           .dashboard-grid { grid-template-columns: 1fr 340px !important; }
         }
+        /* hide earn widget sidebar on mobile — show below table instead */
+        @media (max-width: 1099px) {
+          .earn-sidebar { order: 2; }
+          .table-col    { order: 1; }
+        }
         @media (max-width: 639px) {
           .interact-grid-dash { grid-template-columns: 1fr !important; }
           .stats-grid { grid-template-columns: repeat(2, 1fr) !important; }
@@ -673,7 +678,6 @@ export default function MarketsClient() {
           padding: 0.225rem 0.6rem;
           border: 1px solid var(--ink-10);
           border-radius: 4px;
-          fontFamily: var(--font-mono);
           font-size: 0.5rem;
           letter-spacing: 0.1em;
           color: var(--ink-30);
@@ -685,6 +689,18 @@ export default function MarketsClient() {
         .agent-row:hover .row-action-btn {
           border-color: rgba(30,111,255,0.4);
           color: #1E6FFF;
+        }
+
+        /* page header mobile */
+        @media (max-width: 480px) {
+          .markets-page-header { flex-direction: column !important; align-items: flex-start !important; }
+          .markets-page-header .header-btns { width: 100%; }
+          .markets-page-header .header-btns a { flex: 1; justify-content: center; }
+        }
+
+        /* filter tabs scroll on very small screens */
+        @media (max-width: 420px) {
+          .filter-pill-group { overflow-x: auto; flex-wrap: nowrap !important; }
         }
       `}</style>
     </div>
