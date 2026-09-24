@@ -1,12 +1,12 @@
-# NAIBON — Project Documentation
+# LUMA — Project Documentation
 
 > A stock exchange for AI agents, built on Solana.
 
 ---
 
-## What Is NAIBON?
+## What Is LUMA?
 
-NAIBON is a decentralized protocol that turns AI agents into tradeable, revenue-generating assets. Every agent deployed on NAIBON has a live on-chain vault that collects payments, a ShareToken that investors can buy, and a TEE-verified inference layer that proves the agent ran exactly what it claimed.
+LUMA is a decentralized protocol that turns AI agents into tradeable, revenue-generating assets. Every agent deployed on LUMA has a live on-chain vault that collects payments, a ShareToken that investors can buy, and a TEE-verified inference layer that proves the agent ran exactly what it claimed.
 
 Think of it as a marketplace where AI agents are the assets — you can either **pay to use one**, or **own a piece of one** and earn every time someone else does.
 
@@ -17,7 +17,7 @@ Think of it as a marketplace where AI agents are the assets — you can either *
 ### Agent
 An AI agent is a deployed model with a defined role (e.g. Whale Watcher, Solidity Auditor). Each agent has:
 - A unique ticker (e.g. `WHALE`, `AUDIT`)
-- A subdomain under `naibon.sol` (e.g. `whale.naibon.sol`)
+- A subdomain under `luma.sol` (e.g. `whale.luma.sol`)
 - A per-call price in USDC
 - An on-chain vault that accumulates revenue
 
@@ -71,7 +71,7 @@ Vault snapshot → distributed to ShareToken holders
 | Agent model | DeepSeek v3 (every reply TEE-signed) |
 | Credential vault | 1Claw cloud HSM (keys never in model context) |
 | Hosting | Vercel |
-| Repo | GitHub — `17futureticket-eng/NAIBON` |
+| Repo | GitHub — `17futureticket-eng/LUMA` |
 
 ---
 
@@ -114,7 +114,7 @@ Clicking any row opens a slide-in detail panel with vault balance, top holders, 
 ```
 Draft (local)
     → Mint (on-chain iNFT deployed)
-    → ENS subname registered (ticker.naibon.sol)
+    → ENS subname registered (ticker.luma.sol)
     → IPO opened (ShareTokens available)
     → Active (vault accumulating revenue)
     → Snapshot (periodic distribution to holders)
@@ -148,10 +148,10 @@ Tool credentials (API keys) are:
 ## Repository Structure
 
 ```
-naibon-app/
+luma-app/
 ├── public/
 │   ├── hero.mp4          # Hero section background video
-│   ├── logo.png          # NAIBON logo
+│   ├── logo.png          # LUMA logo
 │   └── image1-3.png      # Section images
 ├── src/
 │   ├── app/
@@ -208,11 +208,11 @@ export const NETWORK_CLUSTER = "mainnet-beta"; // Solana
 
 The app is deployed on **Vercel** with automatic deploys on every push to `main`.
 
-- **Repo:** `https://github.com/17futureticket-eng/NAIBON`
+- **Repo:** `https://github.com/17futureticket-eng/LUMA`
 - **Branch:** `main`
 - **Build command:** `next build` (auto-detected by Vercel)
 - **No environment variables required** for the current frontend-only version
 
 ---
 
-*NAIBON — own a piece of every AI that works.*
+*LUMA — own a piece of every AI that works.*

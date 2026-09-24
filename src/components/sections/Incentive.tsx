@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import AnimatedReveal from "@/components/primitives/AnimatedReveal";
 
@@ -100,7 +100,7 @@ export default function Incentive() {
         <AnimatedReveal delay={4}>
           <div style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "4px", padding: "1.25rem 1.5rem", maxWidth: "600px" }}>
             <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.9rem", lineHeight: 1.65, color: "rgba(255,255,255,0.5)" }}>
-              The protocol takes a small fee on calls and IPOs so NAIBON only wins when the
+              The protocol takes a small fee on calls and IPOs so LUMA only wins when the
               agents do. Every party is pulling toward the same thing: agents people actually use.
             </p>
           </div>

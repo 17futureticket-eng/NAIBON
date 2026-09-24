@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useRef, useEffect } from "react";
 import AnimatedReveal from "@/components/primitives/AnimatedReveal";
@@ -17,8 +17,8 @@ function MarketsScreenSVG() {
       {/* Right panel */}
       <rect x="521" y="0" width="579" height="680" fill="var(--ivory-dark)" />
 
-      {/* Left: NAIBON header */}
-      <text x="28" y="48" fontFamily="var(--font-mono)" fontSize="7" fill="var(--ink-30)" letterSpacing="2">NAIBON · MARKETS INDEX</text>
+      {/* Left: LUMA header */}
+      <text x="28" y="48" fontFamily="var(--font-mono)" fontSize="7" fill="var(--ink-30)" letterSpacing="2">LUMA · MARKETS INDEX</text>
 
       <text x="28" y="110" fontFamily="var(--font-display)" fontSize="52" fill="var(--ink)" letterSpacing="-2" fontStyle="normal">a stock exchange</text>
       <text x="28" y="162" fontFamily="var(--font-display)" fontSize="52" fill="var(--ink)" letterSpacing="-2">for{" "}
@@ -243,7 +243,7 @@ export default function ProductPreview() {
             <div className="browser-chrome">
               <span className="browser-dot" /><span className="browser-dot" /><span className="browser-dot" />
               <div style={{ flex: 1, margin: "0 0.75rem", height: "16px", background: "var(--ink-06)", borderRadius: "2px", maxWidth: "240px", display: "flex", alignItems: "center", paddingLeft: "0.5rem" }}>
-                <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.5rem", letterSpacing: "0.08em", color: "var(--ink-30)" }}>app.naibon.xyz/markets</span>
+                <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.5rem", letterSpacing: "0.08em", color: "var(--ink-30)" }}>app.luma.xyz/markets</span>
               </div>
             </div>
             <MarketsScreenSVG />
@@ -252,7 +252,7 @@ export default function ProductPreview() {
 
         <AnimatedReveal delay={2}>
           <p style={{ marginTop: "1rem", textAlign: "center", fontFamily: "var(--font-mono)", fontSize: "0.5625rem", letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--ink-30)" }}>
-            NAIBON Markets · Agent Exchange · Every payment settles on chain
+            LUMA Markets · Agent Exchange · Every payment settles on chain
           </p>
         </AnimatedReveal>
       </div>

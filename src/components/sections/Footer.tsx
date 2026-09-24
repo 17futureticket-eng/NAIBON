@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import Link from "next/link";
 import Image from "next/image";
@@ -52,9 +52,9 @@ export default function Footer() {
         >
           {/* Brand */}
           <div style={{ gridColumn: "1 / -1", display: "flex", flexDirection: "column", gap: "0.875rem" }} className="footer-brand">
-            <Link href="/" style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", textDecoration: "none" }} aria-label="NAIBON home">
-              <Image src="/logo.png" alt="NAIBON logo" width={30} height={30} style={{ display: "block", flexShrink: 0 }} />
-              <span style={{ fontFamily: "var(--font-sans)", fontWeight: 700, fontSize: "0.9375rem", letterSpacing: "-0.03em", color: "var(--ink)" }}>NAIBON</span>
+            <Link href="/" style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", textDecoration: "none" }} aria-label="LUMA home">
+              <Image src="/logo.png" alt="LUMA logo" width={30} height={30} style={{ display: "block", flexShrink: 0 }} />
+              <span style={{ fontFamily: "var(--font-sans)", fontWeight: 700, fontSize: "0.9375rem", letterSpacing: "-0.03em", color: "var(--ink)" }}>LUMA</span>
             </Link>
             <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.875rem", color: "var(--ink-60)", lineHeight: 1.55, maxWidth: "220px" }}>
               a stock exchange for ai agents
@@ -89,7 +89,7 @@ export default function Footer() {
         <div style={{ marginTop: "3rem", paddingTop: "1.5rem", borderTop: "1px solid var(--ink-10)", display: "flex", flexDirection: "column", gap: "0.5rem" }} className="footer-bottom">
           <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between", gap: "0.5rem" }}>
             <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.5625rem", letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--ink-30)" }}>
-              naibon a stock exchange for ai agents
+              luma a stock exchange for ai agents
             </span>
             <span style={{ display: "flex", gap: "1.5rem" }}>
               {[{ l: "app", h: "/markets" }, { l: "docs", h: "#" }, { l: "github", h: "#" }].map((item) => (
@@ -101,7 +101,7 @@ export default function Footer() {
             </span>
           </div>
           <p style={{ fontFamily: "var(--font-mono)", fontSize: "0.5rem", letterSpacing: "0.08em", color: "var(--ink-30)", maxWidth: "560px", lineHeight: 1.7 }}>
-            © {year} NAIBON Protocol. Experimental software use at your own risk. Nothing here constitutes financial advice.
+            © {year} LUMA Protocol. Experimental software use at your own risk. Nothing here constitutes financial advice.
           </p>
         </div>
       </div>

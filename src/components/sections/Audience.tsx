@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import Image from "next/image";
 import AnimatedReveal from "@/components/primitives/AnimatedReveal";
@@ -13,7 +13,7 @@ const CARDS = [
     cta: "Browse agents →",
     href: "/markets",
     img: "/image3.png",
-    imgAlt: "Agents available on NAIBON marketplace call any agent per inference",
+    imgAlt: "Agents available on LUMA marketplace call any agent per inference",
   },
   {
     tag: "for people who want to invest in them",

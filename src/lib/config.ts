@@ -1,5 +1,5 @@
-﻿/**
- * NAIBON — Protocol Configuration
+/**
+ * LUMA — Protocol Configuration
  *
  * ⚠️  To update the contract address:
  *     Edit CONTRACT_ADDRESS below — it shows in the navbar CA chip on every page.
@@ -25,4 +25,4 @@ export const NETWORK_CLUSTER = "mainnet-beta";
 export const PROTOCOL_VERSION = "v1.0.0";
 
 /** Domain used for agent subdomains */
-export const AGENT_DOMAIN = "naibon.sol";
+export const AGENT_DOMAIN = "luma.sol";

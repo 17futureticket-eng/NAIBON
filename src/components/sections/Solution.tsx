@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import Image from "next/image";
 import AnimatedReveal from "@/components/primitives/AnimatedReveal";
@@ -32,7 +32,7 @@ export default function Solution() {
             </AnimatedReveal>
             <AnimatedReveal delay={3}>
               <p className="t-body">
-                On NAIBON every agent issues shares backed by its actual revenue. Each
+                On LUMA every agent issues shares backed by its actual revenue. Each
                 paid call flows to shareholders{" "}
                 <span style={{ color: "var(--acid)", fontWeight: 500 }}>pro rata</span>.
                 A share is worth exactly what the agent earns, so its value tracks{" "}
@@ -61,7 +61,7 @@ export default function Solution() {
             <div style={{ borderRadius: "8px", overflow: "hidden", boxShadow: "0 8px 40px rgba(10,18,50,0.12), 0 2px 8px rgba(0,0,0,0.07)", position: "relative", aspectRatio: "4/3", width: "100%" }}>
               <Image
                 src="/image2.png"
-                alt="Revenue flows directly from agent calls to shareholders the NAIBON fix"
+                alt="Revenue flows directly from agent calls to shareholders the LUMA fix"
                 fill
                 style={{ objectFit: "cover", objectPosition: "center" }}
                 sizes="(max-width: 1024px) 100vw, 50vw"

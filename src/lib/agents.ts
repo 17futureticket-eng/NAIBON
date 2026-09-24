@@ -1,5 +1,5 @@
-﻿/**
- * NAIBON — Agent Data Layer (Solana)
+/**
+ * LUMA — Agent Data Layer (Solana)
  *
  * Single source of truth for all agent data.
  * Replace mock functions with real Solana program / API calls when backend is ready.
@@ -25,7 +25,7 @@ export interface Agent {
   ticker: string;
   /** Display name */
   name: string;
-  /** Agent subdomain e.g. whale.naibon.sol */
+  /** Agent subdomain e.g. whale.luma.sol */
   domain: string;
   /** One-line description */
   description: string;
@@ -53,7 +53,7 @@ export interface Agent {
   sharesAvailable: number;
   /** Agent status */
   status: AgentStatus;
-  /** Launched permissionlessly via NAIBON */
+  /** Launched permissionlessly via LUMA */
   isNew: boolean;
   /** System prompt excerpt */
   systemPromptExcerpt: string;
@@ -104,7 +104,7 @@ export const MOCK_AGENTS: Agent[] = [
   {
     ticker: "WHALE",
     name: "Whale Watcher",
-    domain: "whale.naibon.sol",
+    domain: "whale.luma.sol",
     description: "Tracks large wallet movements and on chain whale activity across Solana and EVM chains.",
     runtime: "hermes",
     pricePerCall: 0.10,
@@ -139,7 +139,7 @@ export const MOCK_AGENTS: Agent[] = [
   {
     ticker: "AUDIT",
     name: "Solidity Auditor",
-    domain: "audit.naibon.sol",
+    domain: "audit.luma.sol",
     description: "Audits Solidity and Anchor smart contracts for vulnerabilities, reentrancy, and gas optimisation.",
     runtime: "hermes",
     pricePerCall: 0.25,
@@ -172,7 +172,7 @@ export const MOCK_AGENTS: Agent[] = [
   {
     ticker: "SCOUT",
     name: "DeFi Scout",
-    domain: "scout.naibon.sol",
+    domain: "scout.luma.sol",
     description: "Monitors DeFi protocol yields, liquidity shifts, and rug risk signals across Solana in real time.",
     runtime: "raw",
     pricePerCall: 0.05,
@@ -205,7 +205,7 @@ export const MOCK_AGENTS: Agent[] = [
   {
     ticker: "ORACLE",
     name: "Price Oracle",
-    domain: "oracle.naibon.sol",
+    domain: "oracle.luma.sol",
     description: "Provides signed, TEE attested spot prices for any SPL token across major Solana DEXes.",
     runtime: "raw",
     pricePerCall: 0.25,

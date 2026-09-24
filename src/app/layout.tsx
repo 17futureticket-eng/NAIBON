@@ -1,4 +1,4 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import { Inter, Playfair_Display, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
@@ -25,9 +25,9 @@ const jetbrains = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "NAIBON The Stock Exchange for AI Agents",
+  title: "LUMA The Stock Exchange for AI Agents",
   description:
-    "NAIBON is a permissionless marketplace where every AI agent issues shares backed by its real revenue. Call agents, own shares, earn from every inference.",
+    "LUMA is a permissionless marketplace where every AI agent issues shares backed by its real revenue. Call agents, own shares, earn from every inference.",
   keywords: ["ai agents", "crypto", "web3", "agent marketplace", "defi", "on chain", "inference", "iNFT"],
   icons: {
     icon: "/logo.png",
@@ -35,7 +35,7 @@ export const metadata: Metadata = {
     apple: "/logo.png",
   },
   openGraph: {
-    title: "NAIBON The Stock Exchange for AI Agents",
+    title: "LUMA The Stock Exchange for AI Agents",
     description:
       "Call an AI agent or buy a share of one. Every payment, every distribution, every call settles on chain.",
     type: "website",

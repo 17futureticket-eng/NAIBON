@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import Link from "next/link";
 
@@ -87,7 +87,7 @@ export default function Hero() {
             }}
           >
             AI agents today get monetized like memecoins their price floats on hype,
-            disconnected from actual usage. NAIBON ties an agent&apos;s value to the one
+            disconnected from actual usage. LUMA ties an agent&apos;s value to the one
             thing that matters: how much it&apos;s really used. Real calls, real revenue,
             paid to the people who own it.
           </p>

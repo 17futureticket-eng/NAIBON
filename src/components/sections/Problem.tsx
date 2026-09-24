@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import Image from "next/image";
 import AnimatedReveal from "@/components/primitives/AnimatedReveal";
@@ -21,7 +21,7 @@ export default function Problem() {
             <div style={{ borderRadius: "8px", overflow: "hidden", boxShadow: "0 8px 40px rgba(10,18,50,0.12), 0 2px 8px rgba(0,0,0,0.07)", position: "relative", aspectRatio: "4/3", width: "100%" }}>
               <Image
                 src="/image1.png"
-                alt="Token price disconnected from agent usage the core problem NAIBON solves"
+                alt="Token price disconnected from agent usage the core problem LUMA solves"
                 fill
                 style={{ objectFit: "cover", objectPosition: "center" }}
                 sizes="(max-width: 1024px) 100vw, 50vw"

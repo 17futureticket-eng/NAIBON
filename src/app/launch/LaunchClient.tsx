@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
@@ -99,7 +99,7 @@ function Step1({
         </h1>
         <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.9rem", color: "var(--ink-60)", lineHeight: 1.65 }}>
           ticker becomes its ENS subname under{" "}
-          <span style={{ fontFamily: "var(--font-mono)", color: "var(--ink)" }}>naibon.sol</span>
+          <span style={{ fontFamily: "var(--font-mono)", color: "var(--ink)" }}>luma.sol</span>
           {" "}+ the ERC-20 share symbol. permanent.
         </p>
       </div>
@@ -148,7 +148,7 @@ function Step1({
             spellCheck={false}
           />
           <div style={{ position: "absolute", right: "1rem", top: "50%", transform: "translateY(-50%)", fontFamily: "var(--font-mono)", fontSize: "0.75rem", color: "var(--ink-30)", pointerEvents: "none" }}>
-            .naibon.sol
+            .luma.sol
           </div>
         </div>
         <div className="field-hint" style={{ marginTop: "0.375rem", color: tickerOk === true ? "var(--acid)" : tickerOk === false ? "#D06050" : "var(--ink-30)" }}>
@@ -369,7 +369,7 @@ function Step2({
       {/* Review grid */}
       <div style={{ border: "1px solid var(--ink-10)", borderRadius: "3px", overflow: "hidden" }}>
         {[
-          { k: "Ticker", v: `${draft.ticker}.naibon.sol` },
+          { k: "Ticker", v: `${draft.ticker}.luma.sol` },
           { k: "Description", v: draft.description },
           { k: "per call price", v: `$${parseFloat(draft.pricePerCall).toFixed(2)} USDC` },
           { k: "Runtime", v: draft.runtime },

@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
@@ -409,7 +409,7 @@ export default function MarketsClient() {
                 fontFamily: "var(--font-mono)", fontSize: "0.5rem", letterSpacing: "0.18em",
                 textTransform: "uppercase", color: "var(--ink-30)", display: "block", marginBottom: "0.375rem",
               }}>
-                NAIBON · MARKETS
+                LUMA · MARKETS
               </span>
               <h1 style={{
                 fontFamily: "var(--font-display)", fontSize: "clamp(1.5rem, 3vw, 2.25rem)",
@@ -467,7 +467,7 @@ export default function MarketsClient() {
                     <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.5rem", letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--ink-30)" }}>
                       THE AGENTS ·{" "}
                       <span style={{ color: "var(--acid)" }}>NEW</span> = launched via{" "}
-                      <Link href="/launch" style={{ color: "var(--acid)", textDecoration: "none" }}>NAIBON</Link>
+                      <Link href="/launch" style={{ color: "var(--acid)", textDecoration: "none" }}>LUMA</Link>
                     </span>
                   </div>
 

@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
@@ -59,7 +59,7 @@ function ContractChip() {
 }
 
 function LogoMark({ size = 30 }: { size?: number }) {
-  return <Image src="/logo.png" alt="NAIBON logo" width={size} height={size} style={{ display: "block", flexShrink: 0 }} priority />;
+  return <Image src="/logo.png" alt="LUMA logo" width={size} height={size} style={{ display: "block", flexShrink: 0 }} priority />;
 }
 
 export default function Navbar() {
@@ -111,11 +111,11 @@ export default function Navbar() {
         }}>
 
           {/* Logo — flush left, no auto-margin pushing it */}
-          <Link href="/" aria-label="NAIBON home" style={{ display: "flex", alignItems: "center", gap: "0.5rem", textDecoration: "none", flexShrink: 0, marginRight: "0.5rem" }}>
+          <Link href="/" aria-label="LUMA home" style={{ display: "flex", alignItems: "center", gap: "0.5rem", textDecoration: "none", flexShrink: 0, marginRight: "0.5rem" }}>
             <LogoMark size={32} />
             <span style={{ lineHeight: 1, display: "flex", alignItems: "baseline" }}>
-              <span style={{ fontFamily: "var(--font-sans)", fontWeight: 800, fontSize: "1.0625rem", letterSpacing: "-0.04em", color: "var(--ink)" }}>NAI</span>
-              <span style={{ fontFamily: "var(--font-sans)", fontWeight: 300, fontSize: "1.0625rem", letterSpacing: "-0.04em", color: "var(--ink-60)" }}>BON</span>
+              <span style={{ fontFamily: "var(--font-sans)", fontWeight: 800, fontSize: "1.0625rem", letterSpacing: "-0.04em", color: "var(--ink)" }}>LU</span>
+              <span style={{ fontFamily: "var(--font-sans)", fontWeight: 300, fontSize: "1.0625rem", letterSpacing: "-0.04em", color: "var(--ink-60)" }}>MA</span>
             </span>
           </Link>
 
@@ -198,8 +198,8 @@ export default function Navbar() {
           <Link href="/" onClick={() => setMenuOpen(false)} style={{ display: "flex", alignItems: "center", gap: "0.5rem", textDecoration: "none" }}>
             <LogoMark size={28} />
             <span style={{ lineHeight: 1, display: "flex", alignItems: "baseline" }}>
-              <span style={{ fontFamily: "var(--font-sans)", fontWeight: 800, fontSize: "1.0625rem", letterSpacing: "-0.04em", color: "var(--ink)" }}>NAI</span>
-              <span style={{ fontFamily: "var(--font-sans)", fontWeight: 300, fontSize: "1.0625rem", letterSpacing: "-0.04em", color: "var(--ink-60)" }}>BON</span>
+              <span style={{ fontFamily: "var(--font-sans)", fontWeight: 800, fontSize: "1.0625rem", letterSpacing: "-0.04em", color: "var(--ink)" }}>LU</span>
+              <span style={{ fontFamily: "var(--font-sans)", fontWeight: 300, fontSize: "1.0625rem", letterSpacing: "-0.04em", color: "var(--ink-60)" }}>MA</span>
             </span>
           </Link>
           <button onClick={() => setMenuOpen(false)} aria-label="Close menu" style={{ background: "none", border: "none", cursor: "pointer", padding: "4px" }}>

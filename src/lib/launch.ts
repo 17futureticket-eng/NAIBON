@@ -1,5 +1,5 @@
-﻿/**
- * NAIBON Launch Agent Data Layer
+/**
+ * LUMA Launch Agent Data Layer
  *
  * Manages draft state, manifest computation, and the mint/deploy flow.
  * Replace mock functions with real wallet/contract calls when ready.
@@ -83,7 +83,7 @@ export const EMPTY_DRAFT: AgentDraft = {
   skills: [],
 };
 
-const DRAFT_KEY = "naibon:launch:draft";
+const DRAFT_KEY = "luma:launch:draft";
 
 export function saveDraft(draft: AgentDraft): void {
   if (typeof window === "undefined") return;
@@ -126,7 +126,7 @@ const RUNTIME_BACKEND: Record<Runtime, string> = {
  */
 export function buildManifest(draft: AgentDraft): ManifestPreview {
   const ens = draft.ticker
-    ? `${draft.ticker.toLowerCase()}.naibon.sol`
+    ? `${draft.ticker.toLowerCase()}.luma.sol`
     : " ";
 
   const priceDisplay = draft.pricePerCall
@@ -146,7 +146,7 @@ export function buildManifest(draft: AgentDraft): ManifestPreview {
   const skills = draft.skills.map((s) => s.name);
 
   return {
-    ticker: draft.ticker ? `${draft.ticker.toUpperCase()}.naibon.sol` : " ",
+    ticker: draft.ticker ? `${draft.ticker.toUpperCase()}.luma.sol` : " ",
     price: priceDisplay,
     runtime: draft.runtime,
     backend: RUNTIME_BACKEND[draft.runtime],
@@ -215,7 +215,7 @@ export async function mintAgent(
 
   const result: LaunchResult = {
     ticker: draft.ticker.toUpperCase(),
-    ens: `${draft.ticker.toLowerCase()}.naibon.sol`,
+    ens: `${draft.ticker.toLowerCase()}.luma.sol`,
     inftTokenId: `0x${Math.random().toString(16).slice(2, 10).toUpperCase()}...${Math.random().toString(16).slice(2, 6).toUpperCase()}`,
     contractAddress: `0x${Math.random().toString(16).slice(2, 10).toUpperCase()}...${Math.random().toString(16).slice(2, 6)}`,
     txHash: `0x${Math.random().toString(16).slice(2, 12)}...${Math.random().toString(16).slice(2, 8)}`,
