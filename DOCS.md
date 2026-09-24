@@ -180,7 +180,7 @@ naibon-app/
 ### Contract Address
 Set in `src/lib/config.ts`:
 ```ts
-export const CONTRACT_ADDRESS = "NAiBnXkF7bPiQm9VhLdR3eWsK2cTgYoUjAqMvDpHz4";
+export const CONTRACT_ADDRESS = "00000000000000000";
 ```
 This value renders in the navbar CA chip on every page.
 

@@ -8,7 +8,7 @@
  */
 
 /** Token / program address on Solana — update this when deploying */
-export const CONTRACT_ADDRESS = "NAiBnXkF7bPiQm9VhLdR3eWsK2cTgYoUjAqMvDpHz4";
+export const CONTRACT_ADDRESS = "00000000000000000";
 
 /** Shortened version for display  e.g.  NAiBn...Hz4 */
 export function shortContract(addr: string = CONTRACT_ADDRESS): string {
