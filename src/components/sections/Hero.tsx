@@ -17,13 +17,11 @@ export default function Hero() {
         paddingTop: "var(--header-h)",
       }}
     >
-      {/* Background video */}
-      <video
-        autoPlay muted loop playsInline aria-hidden="true"
-        style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", objectPosition: "center", zIndex: 0 }}
-      >
-        <source src="/hero.mp4" type="video/mp4" />
-      </video>
+      {/* Background image */}
+      <div
+        aria-hidden="true"
+        style={{ position: "absolute", inset: 0, width: "100%", height: "100%", zIndex: 0, backgroundImage: "url('/luma-x-banner.jpg')", backgroundSize: "cover", backgroundPosition: "center" }}
+      />
 
       {/* Dark overlay */}
       <div aria-hidden="true" style={{ position: "absolute", inset: 0, zIndex: 1, background: "linear-gradient(160deg, rgba(5,8,20,0.82) 0%, rgba(8,14,32,0.52) 55%, rgba(5,8,20,0.80) 100%)" }} />
