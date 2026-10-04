@@ -60,8 +60,8 @@ export default function Solution() {
           <AnimatedReveal direction="right" className="sol-img">
             <div style={{ borderRadius: "8px", overflow: "hidden", boxShadow: "0 8px 40px rgba(10,18,50,0.12), 0 2px 8px rgba(0,0,0,0.07)", position: "relative", aspectRatio: "4/3", width: "100%" }}>
               <Image
-                src="/image2.png"
-                alt="Revenue flows directly from agent calls to shareholders the LUMA fix"
+                src="/LUMA X BANNER.png"
+                alt="LUMA — a stock exchange for AI agents"
                 fill
                 style={{ objectFit: "cover", objectPosition: "center" }}
                 sizes="(max-width: 1024px) 100vw, 50vw"
