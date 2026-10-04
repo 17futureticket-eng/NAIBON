@@ -59,7 +59,7 @@ function ContractChip() {
 }
 
 function LogoMark({ size = 30 }: { size?: number }) {
-  return <Image src="/logo.png" alt="LUMA logo" width={size} height={size} style={{ display: "block", flexShrink: 0 }} priority />;
+  return <Image src="/LUMA LOGO-01.jpg" alt="LUMA logo" width={size} height={size} style={{ display: "block", flexShrink: 0, borderRadius: "4px" }} priority />;
 }
 
 export default function Navbar() {
