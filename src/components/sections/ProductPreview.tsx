@@ -69,7 +69,7 @@ export default function ProductPreview() {
             }}
           >
             <Image
-              src="/LUMA X BANNER.png"
+              src="/luma-x-banner.jpg"
               alt="LUMA — a stock exchange for AI agents"
               width={1500}
               height={500}
