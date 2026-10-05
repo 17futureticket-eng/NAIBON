@@ -18,7 +18,7 @@ export default function Problem() {
 
           {/* Left: real image (image1.png) */}
           <AnimatedReveal direction="left">
-            <div style={{ borderRadius: "8px", overflow: "hidden", boxShadow: "0 8px 40px rgba(10,18,50,0.12), 0 2px 8px rgba(0,0,0,0.07)", position: "relative", aspectRatio: "4/3", width: "100%" }}>
+            <div style={{ borderRadius: "8px", overflow: "hidden", boxShadow: "0 8px 40px rgba(10,18,50,0.12), 0 2px 8px rgba(0,0,0,0.07)", position: "relative", aspectRatio: "4/3", width: "100%", maxWidth: "100%" }}>
               <Image
                 src="/image1.png"
                 alt="Token price disconnected from agent usage the core problem LUMA solves"

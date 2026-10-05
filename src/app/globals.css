@@ -1501,3 +1501,111 @@ nav {
 .stagger-child:nth-child(4) { transition-delay: 0.26s; }
 .stagger-child:nth-child(5) { transition-delay: 0.33s; }
 .stagger-child:nth-child(6) { transition-delay: 0.40s; }
+
+/* ============================================================
+   LUMA — Mobile-first UX fixes
+   All screens ≤ 640px
+   ============================================================ */
+
+@media (max-width: 640px) {
+
+  /* Nav height tighter on mobile */
+  :root {
+    --nav-h: 56px;
+    --header-h: 56px;
+  }
+
+  /* Tighter section padding */
+  .section-pad    { padding-top: 3rem !important; padding-bottom: 3rem !important; }
+  .section-pad-sm { padding-top: 2rem !important; padding-bottom: 2rem !important; }
+
+  /* Tighter container */
+  .container-wide,
+  .container-narrow {
+    padding-left: 1.125rem !important;
+    padding-right: 1.125rem !important;
+  }
+
+  /* Smaller display type on mobile */
+  .t-display    { font-size: clamp(2rem, 9vw, 3rem) !important; }
+  .t-display-sm { font-size: clamp(1.75rem, 8vw, 2.5rem) !important; }
+  .t-display-xs { font-size: clamp(1.5rem, 7vw, 2rem) !important; }
+  .t-body       { font-size: 0.9375rem !important; }
+
+  /* Buttons — full-width stack on mobile */
+  .btn-primary,
+  .btn-ghost {
+    padding: 0.875rem 1.25rem !important;
+    font-size: 0.9375rem !important;
+  }
+
+  /* Touch targets — minimum 44px */
+  .btn { min-height: 44px; }
+}
+
+/* ============================================================
+   Navbar mobile — logo smaller, CA chip hidden
+   ============================================================ */
+@media (max-width: 640px) {
+  .nav-logo-img { width: 36px !important; height: 36px !important; }
+  .nav-ca-chip  { display: none !important; }
+}
+
+/* ============================================================
+   Audience section mobile
+   ============================================================ */
+@media (max-width: 767px) {
+  /* Single column, no hover lift breaking layout */
+  .audience-grid { grid-template-columns: 1fr !important; gap: 1.25rem !important; }
+}
+
+/* ============================================================
+   Incentive / dark section mobile
+   ============================================================ */
+@media (max-width: 640px) {
+  .md-three-col-inc { grid-template-columns: 1fr !important; gap: 0.875rem !important; }
+}
+
+/* ============================================================
+   Problem / Solution grids — always single col on mobile
+   ============================================================ */
+@media (max-width: 1023px) {
+  .problem-grid  { grid-template-columns: 1fr !important; }
+  .solution-grid { grid-template-columns: 1fr !important; }
+}
+
+/* ============================================================
+   How It Works cards
+   ============================================================ */
+@media (max-width: 767px) {
+  .md-three-col { grid-template-columns: 1fr !important; gap: 1rem !important; }
+}
+
+/* ============================================================
+   Footer — single column on mobile
+   ============================================================ */
+@media (max-width: 767px) {
+  .footer-grid  { grid-template-columns: 1fr 1fr !important; gap: 2rem 1.5rem !important; }
+  .footer-brand { grid-column: 1 / -1 !important; }
+}
+@media (max-width: 480px) {
+  .footer-grid  { grid-template-columns: 1fr !important; }
+}
+
+/* ============================================================
+   Markets dashboard — single col on mobile
+   ============================================================ */
+@media (max-width: 640px) {
+  .stats-grid         { grid-template-columns: 1fr 1fr !important; gap: 0.5rem !important; }
+  .interact-grid-dash { grid-template-columns: 1fr !important; gap: 0.75rem !important; }
+}
+@media (max-width: 380px) {
+  .stats-grid { grid-template-columns: 1fr !important; }
+}
+
+/* ============================================================
+   Launch wizard — full-width form on mobile
+   ============================================================ */
+@media (max-width: 640px) {
+  .launch-form { padding: 1.25rem 1rem !important; }
+}

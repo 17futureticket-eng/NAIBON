@@ -67,6 +67,7 @@ function LogoMark({ size = 52 }: { size?: number }) {
       alt="LUMA"
       width={size}
       height={size}
+      className="nav-logo-img"
       style={{ display: "block", flexShrink: 0, borderRadius: "10px", boxShadow: "0 2px 12px rgba(0,0,0,0.18)" }}
       priority
     />
@@ -191,7 +192,7 @@ export default function Navbar() {
 
           {/* Desktop right */}
           <div className="nav-right-desktop" style={{ display: "flex", alignItems: "center", gap: "0.5rem", flexShrink: 0 }}>
-            <ContractChip dark={dark} />
+            <span className="nav-ca-chip"><ContractChip dark={dark} /></span>
             <Link
               href="/markets"
               className="btn"
