@@ -242,7 +242,7 @@ function Step1({ draft, setDraft, onNext }: {
             </div>
           ))}
         </div>
-        <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
+        <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }} className="cred-add-row">
           <input style={{ ...inputBase, flex: "1 1 130px", fontSize: "0.8125rem" }} placeholder="KEY_NAME"
             value={credName} onChange={(e) => setCredName(e.target.value.toUpperCase().replace(/\s/g, "_"))} />
           <input style={{ ...inputBase, flex: "2 1 200px", fontSize: "0.8125rem" }} placeholder="sk-…" type="password"
@@ -317,7 +317,7 @@ function Step2({ draft, onBack, onMint, txStatus }: {
           { k: "Skills",      v: draft.skills.length > 0 ? draft.skills.map((s) => s.name).join(", ") : "hermes auto-generates" },
           { k: "Prompt",      v: draft.systemPrompt ? `${draft.systemPrompt.slice(0, 120)}…` : "none" },
         ].map((row, i, arr) => (
-          <div key={row.k} style={{ display: "grid", gridTemplateColumns: "120px 1fr", padding: "0.875rem 1.25rem", borderBottom: i < arr.length - 1 ? "1px solid rgba(255,255,255,0.05)" : "none", alignItems: "start", background: i % 2 === 0 ? "rgba(255,255,255,0.01)" : "transparent" }}>
+          <div key={row.k} className="review-grid-row" style={{ display: "grid", gridTemplateColumns: "120px 1fr", padding: "0.875rem 1.25rem", borderBottom: i < arr.length - 1 ? "1px solid rgba(255,255,255,0.05)" : "none", alignItems: "start", background: i % 2 === 0 ? "rgba(255,255,255,0.01)" : "transparent" }}>
             <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.5rem", letterSpacing: "0.12em", textTransform: "uppercase", color: "rgba(255,255,255,0.25)" }}>{row.k}</span>
             <span style={{ fontFamily: "var(--font-sans)", fontSize: "0.875rem", color: "rgba(255,255,255,0.75)", lineHeight: 1.5, wordBreak: "break-word" }}>{row.v}</span>
           </div>
@@ -436,48 +436,47 @@ export default function LaunchClient() {
   const handleReset = () => { setDraftState(EMPTY_DRAFT); setTxStatus("idle"); setResult(null); setStep(1); };
 
   return (
-    <div style={{ minHeight: "100vh", background: "var(--onyx)" }}>
+    <div style={{ minHeight: "100vh", background: "var(--onyx)", width: "100%", overflowX: "hidden" }}>
       <Navbar />
-      <main style={{ paddingTop: "var(--nav-h)" }}>
+      <main style={{ paddingTop: "var(--nav-h)", width: "100%", overflowX: "hidden" }}>
 
         {/* Dark page header */}
-        <div style={{ background: "linear-gradient(180deg, rgba(14,18,36,1) 0%, rgba(10,14,26,0.97) 100%)", borderBottom: "1px solid rgba(255,255,255,0.06)", padding: "2rem 0 0" }}>
+        <div style={{ background: "linear-gradient(180deg, rgba(14,18,36,1) 0%, rgba(10,14,26,0.97) 100%)", borderBottom: "1px solid rgba(255,255,255,0.06)", padding: "clamp(1.25rem,3vw,2rem) 0 0" }}>
           <div className="container-wide">
-            <div style={{ marginBottom: "1.5rem" }}>
+            <div style={{ marginBottom: "1.25rem" }}>
               <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.5rem", letterSpacing: "0.18em", textTransform: "uppercase", color: "rgba(255,255,255,0.25)", display: "block", marginBottom: "0.5rem" }}>
                 LUMA · LAUNCH
               </span>
-              <h1 style={{ fontFamily: "var(--font-display)", fontWeight: 400, fontSize: "clamp(1.5rem,3vw,2.25rem)", letterSpacing: "-0.03em", color: "#fff", margin: 0 }}>
+              <h1 style={{ fontFamily: "var(--font-display)", fontWeight: 400, fontSize: "clamp(1.375rem,3vw,2.25rem)", letterSpacing: "-0.03em", color: "#fff", margin: 0 }}>
                 Deploy your agent
               </h1>
             </div>
-            {/* Step bar lives inside the dark header */}
             <div style={{ border: "1px solid rgba(255,255,255,0.07)", borderBottom: "none", borderRadius: "8px 8px 0 0", overflow: "hidden" }}>
               <StepBar step={step} />
             </div>
           </div>
         </div>
 
-        {/* Two-col form area */}
-        <div className="container-wide" style={{ paddingTop: 0, paddingBottom: "4rem" }}>
+        {/* Form area */}
+        <div className="container-wide" style={{ paddingTop: 0, paddingBottom: "clamp(2rem,6vw,4rem)" }}>
           <div style={{
-            border: "1px solid rgba(255,255,255,0.07)",
-            borderTop: "none",
+            border: "1px solid rgba(255,255,255,0.07)", borderTop: "none",
             borderRadius: "0 0 8px 8px",
             display: "grid", gridTemplateColumns: "1fr",
             background: "rgba(255,255,255,0.015)",
+            width: "100%", boxSizing: "border-box", overflowX: "hidden",
           }} className="launch-grid">
 
             {/* Form */}
-            <div style={{ padding: "2.5rem clamp(1.25rem, 3vw, 3rem)" }} className="launch-form">
+            <div style={{ padding: "clamp(1.25rem,4vw,2.5rem) clamp(1rem,4vw,3rem)", minWidth: 0, boxSizing: "border-box" }} className="launch-form">
               {step === 1 && <Step1 draft={draft} setDraft={setDraft} onNext={() => setStep(2)} />}
               {step === 2 && <Step2 draft={draft} onBack={() => setStep(1)} onMint={handleMint} txStatus={txStatus} />}
               {step === 3 && launchResult && <Step3 result={launchResult} draft={draft} onReset={handleReset} />}
             </div>
 
-            {/* Manifest preview */}
+            {/* Manifest — hidden on mobile to avoid overflow */}
             {step !== 3 && (
-              <div style={{ padding: "2.5rem 2rem", borderLeft: "1px solid rgba(255,255,255,0.06)" }} className="launch-manifest">
+              <div style={{ padding: "clamp(1.25rem,3vw,2.5rem) clamp(1rem,3vw,2rem)", borderLeft: "1px solid rgba(255,255,255,0.06)", minWidth: 0, boxSizing: "border-box" }} className="launch-manifest">
                 <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.4375rem", letterSpacing: "0.16em", textTransform: "uppercase", color: "rgba(255,255,255,0.2)", display: "block", marginBottom: "0.75rem" }}>Live manifest preview</span>
                 <ManifestPreviewPanel manifest={manifest} valid={manifestValid} />
               </div>
@@ -488,18 +487,48 @@ export default function LaunchClient() {
       <Footer />
 
       <style>{`
+        /* Desktop two-col layout */
         @media (min-width: 1024px) {
-          .launch-grid { grid-template-columns: 1fr 360px !important; }
-          .launch-form { padding: 3rem 3.5rem !important; }
+          .launch-grid { grid-template-columns: 1fr 340px !important; }
         }
+        /* Manifest stacks below form on tablet */
         @media (max-width: 1023px) {
           .launch-manifest { border-top: 1px solid rgba(255,255,255,0.06) !important; border-left: none !important; }
         }
+        /* Mobile: hide manifest panel entirely to save space */
         @media (max-width: 640px) {
-          .launch-form { padding: 1.5rem 1.25rem !important; }
+          .launch-manifest { display: none !important; }
+          .launch-form { padding: 1.25rem 1rem !important; }
         }
 
-        /* Override field-input for dark bg */
+        /* Credential add row — stack on narrow */
+        @media (max-width: 500px) {
+          .cred-add-row { flex-direction: column !important; }
+          .cred-add-row input,
+          .cred-add-row button { width: 100% !important; flex: none !important; }
+        }
+
+        /* Step 2 review grid — narrower key col on mobile */
+        @media (max-width: 480px) {
+          .review-grid-row { grid-template-columns: 90px 1fr !important; }
+        }
+
+        /* Step 3 CTAs — stack on mobile */
+        @media (max-width: 400px) {
+          .step3-ctas { flex-direction: column !important; }
+          .step3-ctas a,
+          .step3-ctas button { flex: none !important; width: 100% !important; }
+        }
+
+        /* All inputs/textareas inside form: never overflow */
+        .launch-form input,
+        .launch-form textarea,
+        .launch-form select {
+          max-width: 100%;
+          box-sizing: border-box;
+        }
+
+        /* Dark field overrides */
         .launch-form .field-input,
         .launch-form .field-textarea {
           background: rgba(255,255,255,0.04) !important;
@@ -507,15 +536,13 @@ export default function LaunchClient() {
           color: #fff !important;
         }
         .launch-form .field-input:focus,
-        .launch-form .field-textarea:focus {
-          border-color: rgba(30,111,255,0.5) !important;
-        }
+        .launch-form .field-textarea:focus { border-color: rgba(30,111,255,0.5) !important; }
         .launch-form .field-input::placeholder,
-        .launch-form .field-textarea::placeholder {
-          color: rgba(255,255,255,0.2) !important;
-        }
+        .launch-form .field-textarea::placeholder { color: rgba(255,255,255,0.2) !important; }
         .launch-form .field-label { color: rgba(255,255,255,0.3) !important; }
         .launch-form .field-hint  { color: rgba(255,255,255,0.2) !important; }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
       `}</style>
     </div>
   );
