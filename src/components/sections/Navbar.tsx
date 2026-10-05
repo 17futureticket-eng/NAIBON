@@ -58,14 +58,14 @@ function ContractChip() {
   );
 }
 
-function LogoMark({ size = 34 }: { size?: number }) {
+function LogoMark({ size = 44 }: { size?: number }) {
   return (
     <Image
       src="/luma-logo-01.jpg"
       alt="LUMA"
       width={size}
       height={size}
-      style={{ display: "block", flexShrink: 0, borderRadius: "6px" }}
+      style={{ display: "block", flexShrink: 0, borderRadius: "8px" }}
       priority
     />
   );
@@ -112,7 +112,7 @@ export default function Navbar() {
           height: "100%",
           display: "flex",
           alignItems: "center",
-          padding: "0 clamp(0.75rem, 3vw, 2rem)",
+          padding: "0 clamp(0.5rem, 2vw, 1.25rem)",
           maxWidth: "1440px",
           margin: "0 auto",
           width: "100%",

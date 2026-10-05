@@ -9,75 +9,81 @@ export default function Hero() {
       aria-label="Hero"
       style={{
         height: "100vh",
-        minHeight: "540px",
+        minHeight: "600px",
         display: "flex",
         flexDirection: "column",
         position: "relative",
         overflow: "hidden",
-        paddingTop: "var(--header-h)",
       }}
     >
-      {/* Background image */}
+      {/* Background image — full bleed, no padding eating into it */}
       <div
         aria-hidden="true"
         style={{
-          position: "absolute", inset: 0, width: "100%", height: "100%", zIndex: 0,
+          position: "absolute", inset: 0, zIndex: 0,
           backgroundImage: "url('/luma-x-banner.jpg')",
           backgroundSize: "cover",
-          backgroundPosition: "center",
+          backgroundPosition: "center top",
         }}
       />
 
-      {/* Dark overlay — heavier so text is always legible */}
-      <div aria-hidden="true" style={{ position: "absolute", inset: 0, zIndex: 1, background: "linear-gradient(160deg, rgba(5,8,20,0.88) 0%, rgba(8,14,32,0.62) 50%, rgba(5,8,20,0.85) 100%)" }} />
-
-      {/* Bottom vignette */}
-      <div aria-hidden="true" style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: "42%", zIndex: 2, background: "linear-gradient(to top, rgba(6,14,40,0.70) 0%, transparent 100%)", pointerEvents: "none" }} />
+      {/* Subtle dark gradient only at the very bottom-left — keeps most of image visible */}
+      <div aria-hidden="true" style={{
+        position: "absolute", inset: 0, zIndex: 1,
+        background: "linear-gradient(to right, rgba(4,6,16,0.78) 0%, rgba(4,6,16,0.45) 45%, rgba(4,6,16,0.10) 100%)",
+      }} />
+      <div aria-hidden="true" style={{
+        position: "absolute", bottom: 0, left: 0, right: 0, height: "55%", zIndex: 1,
+        background: "linear-gradient(to top, rgba(4,6,16,0.65) 0%, transparent 100%)",
+        pointerEvents: "none",
+      }} />
 
       {/* Ambient glow orbs */}
       <div aria-hidden="true" className="hero-orb hero-orb-1" />
-      <div aria-hidden="true" className="hero-orb hero-orb-2" />
 
-      {/* ── Main content ── */}
+      {/* ── Content pinned to bottom-left ── */}
       <div
         className="container-wide"
-        style={{ position: "relative", zIndex: 3, flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", paddingTop: "clamp(1rem, 3vh, 2rem)", paddingBottom: "clamp(1rem, 2vh, 1.5rem)" }}
+        style={{
+          position: "relative", zIndex: 2,
+          marginTop: "auto",
+          paddingBottom: "clamp(3rem, 6vh, 5rem)",
+          paddingTop: "var(--nav-h)",
+        }}
       >
-        <div style={{ maxWidth: "620px", display: "flex", flexDirection: "column", gap: "clamp(1.25rem, 2.5vh, 2rem)" }}>
+        <div style={{ maxWidth: "480px", display: "flex", flexDirection: "column", gap: "1.5rem" }}>
 
-          {/* Sub-copy — large, clear, white */}
+          {/* One tight line of copy */}
           <p
             className="animate-fade-up"
             style={{
               animationDelay: "0.1s",
-              maxWidth: "520px",
               fontFamily: "var(--font-sans)",
-              fontSize: "clamp(1rem, 1.5vw, 1.2rem)",
-              lineHeight: 1.75,
-              color: "rgba(220,235,255,0.92)",
+              fontSize: "clamp(0.9375rem, 1.2vw, 1.05rem)",
+              lineHeight: 1.65,
+              color: "rgba(210,228,255,0.85)",
               fontWeight: 400,
+              maxWidth: "400px",
             }}
           >
-            AI agents today get monetized like memecoins — price floats on hype,
-            disconnected from actual usage. LUMA ties an agent&apos;s value to the one
-            thing that matters: how much it&apos;s really used. Real calls. Real revenue.
-            Paid to the people who own it.
+            A stock exchange for AI agents. Real calls, real revenue — paid
+            on-chain to the people who own it.
           </p>
 
-          {/* CTAs — bold, prominent */}
-          <div className="animate-fade-up" style={{ animationDelay: "0.22s", display: "flex", flexWrap: "wrap", gap: "0.875rem" }}>
+          {/* CTAs */}
+          <div className="animate-fade-up" style={{ animationDelay: "0.25s", display: "flex", gap: "0.75rem", flexWrap: "wrap" }}>
             <Link
               href="/markets"
               className="btn"
               style={{
-                fontSize: "1rem",
+                fontSize: "0.9375rem",
                 fontWeight: 700,
-                padding: "0.875rem 2rem",
+                padding: "0.8125rem 1.875rem",
                 borderRadius: "8px",
-                background: "rgba(255,255,255,0.95)",
-                color: "var(--ink)",
+                background: "rgba(255,255,255,0.96)",
+                color: "#0A0E1A",
                 border: "none",
-                boxShadow: "0 4px 24px rgba(0,0,0,0.25)",
+                boxShadow: "0 4px 20px rgba(0,0,0,0.3)",
                 letterSpacing: "-0.01em",
               }}
             >
@@ -87,14 +93,14 @@ export default function Hero() {
               href="#how-it-works"
               className="btn"
               style={{
-                fontSize: "1rem",
+                fontSize: "0.9375rem",
                 fontWeight: 500,
-                padding: "0.875rem 1.75rem",
+                padding: "0.8125rem 1.625rem",
                 borderRadius: "8px",
-                background: "rgba(255,255,255,0.10)",
-                color: "rgba(255,255,255,0.92)",
-                border: "1.5px solid rgba(255,255,255,0.35)",
-                backdropFilter: "blur(8px)",
+                background: "rgba(255,255,255,0.08)",
+                color: "rgba(255,255,255,0.88)",
+                border: "1.5px solid rgba(255,255,255,0.30)",
+                backdropFilter: "blur(10px)",
                 letterSpacing: "-0.01em",
               }}
             >
@@ -102,23 +108,23 @@ export default function Hero() {
             </Link>
           </div>
 
-          {/* Trust tags */}
-          <div className="animate-fade-up" style={{ animationDelay: "0.34s", display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
-            {["TEE Attested", "Non Custodial", "Permissionless", "On-chain Settlement"].map((t) => (
+          {/* Trust tags — small, unobtrusive */}
+          <div className="animate-fade-up" style={{ animationDelay: "0.4s", display: "flex", flexWrap: "wrap", gap: "0.375rem" }}>
+            {["TEE Attested", "Non Custodial", "Permissionless", "On-chain"].map((t) => (
               <span
                 key={t}
                 style={{
                   display: "inline-flex",
                   alignItems: "center",
-                  padding: "0.3rem 0.875rem",
-                  background: "rgba(255,255,255,0.08)",
-                  border: "1px solid rgba(255,255,255,0.18)",
-                  borderRadius: "4px",
+                  padding: "0.25rem 0.625rem",
+                  background: "rgba(255,255,255,0.06)",
+                  border: "1px solid rgba(255,255,255,0.12)",
+                  borderRadius: "3px",
                   fontFamily: "var(--font-mono)",
-                  fontSize: "0.5625rem",
-                  letterSpacing: "0.12em",
+                  fontSize: "0.5rem",
+                  letterSpacing: "0.1em",
                   textTransform: "uppercase",
-                  color: "rgba(200,220,255,0.75)",
+                  color: "rgba(180,210,255,0.55)",
                 }}
               >
                 {t}
@@ -129,12 +135,12 @@ export default function Hero() {
       </div>
 
       {/* Bottom bar */}
-      <div style={{ position: "relative", zIndex: 3, borderTop: "1px solid rgba(255,255,255,0.08)", flexShrink: 0 }}>
-        <div className="container-wide" style={{ paddingTop: "0.625rem", paddingBottom: "0.625rem", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.5rem", letterSpacing: "0.12em", textTransform: "uppercase", color: "rgba(255,255,255,0.25)" }}>
+      <div style={{ position: "relative", zIndex: 2, borderTop: "1px solid rgba(255,255,255,0.07)", flexShrink: 0 }}>
+        <div className="container-wide" style={{ paddingTop: "0.5rem", paddingBottom: "0.5rem", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.4875rem", letterSpacing: "0.12em", textTransform: "uppercase", color: "rgba(255,255,255,0.2)" }}>
             Scroll to explore
           </span>
-          <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.5rem", letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(255,255,255,0.25)" }}>
+          <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.4875rem", letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(255,255,255,0.2)" }}>
             v1.0.0
           </span>
         </div>
@@ -144,26 +150,20 @@ export default function Hero() {
         .hero-orb {
           position: absolute;
           border-radius: 50%;
-          filter: blur(90px);
+          filter: blur(110px);
           pointer-events: none;
           z-index: 1;
-          animation: orb-drift 12s ease-in-out infinite alternate;
+          animation: orb-drift 18s ease-in-out infinite alternate;
         }
         .hero-orb-1 {
-          width: 520px; height: 520px;
-          background: radial-gradient(circle, rgba(30,111,255,0.22) 0%, transparent 70%);
-          top: -100px; left: -80px;
+          width: 600px; height: 600px;
+          background: radial-gradient(circle, rgba(30,111,255,0.15) 0%, transparent 70%);
+          bottom: -120px; left: -100px;
           animation-delay: 0s;
-        }
-        .hero-orb-2 {
-          width: 400px; height: 400px;
-          background: radial-gradient(circle, rgba(100,60,255,0.16) 0%, transparent 70%);
-          bottom: 60px; right: 5%;
-          animation-delay: -5s;
         }
         @keyframes orb-drift {
           0%   { transform: translate(0, 0) scale(1); }
-          100% { transform: translate(40px, 30px) scale(1.08); }
+          100% { transform: translate(30px, -20px) scale(1.06); }
         }
       `}</style>
     </section>
