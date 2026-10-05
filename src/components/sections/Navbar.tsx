@@ -6,20 +6,21 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { CONTRACT_ADDRESS } from "@/lib/config";
 
+// Docs + GitHub removed
 const NAV_LINKS = [
   { label: "Markets", href: "/markets" },
   { label: "Launch Agent", href: "/launch" },
-  { label: "Docs", href: "#" },
-  { label: "GitHub", href: "#" },
 ];
 
-function ContractChip() {
+function ContractChip({ dark }: { dark?: boolean }) {
   const [copied, setCopied] = useState(false);
   const copy = () => {
     navigator.clipboard?.writeText(CONTRACT_ADDRESS).catch(() => {});
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
+  const textColor = dark ? "rgba(255,255,255,0.55)" : "var(--ink-60)";
+  const borderColor = dark ? "rgba(255,255,255,0.15)" : "var(--ink-10)";
   return (
     <button
       onClick={copy}
@@ -29,22 +30,23 @@ function ContractChip() {
         display: "inline-flex", alignItems: "center", gap: "0.375rem",
         padding: "0.3125rem 0.75rem", borderRadius: "6px",
         background: "transparent",
-        border: "1px solid var(--ink-10)",
-        cursor: "pointer", transition: "border-color 0.2s ease, background 0.2s ease",
+        border: `1px solid ${borderColor}`,
+        cursor: "pointer", transition: "all 0.2s ease",
         outline: "none", whiteSpace: "nowrap",
       }}
       onMouseEnter={(e) => {
-        (e.currentTarget as HTMLElement).style.background = "var(--ink-06)";
-        (e.currentTarget as HTMLElement).style.borderColor = "var(--ink-30)";
+        (e.currentTarget as HTMLElement).style.background = dark ? "rgba(255,255,255,0.08)" : "var(--ink-06)";
+        (e.currentTarget as HTMLElement).style.borderColor = dark ? "rgba(255,255,255,0.3)" : "var(--ink-30)";
       }}
       onMouseLeave={(e) => {
         (e.currentTarget as HTMLElement).style.background = "transparent";
-        (e.currentTarget as HTMLElement).style.borderColor = "var(--ink-10)";
+        (e.currentTarget as HTMLElement).style.borderColor = borderColor;
       }}
     >
-      <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.5625rem", letterSpacing: "0.06em", color: "var(--ink-60)" }}>CA:</span>
-      <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.5625rem", letterSpacing: "0.04em", color: "var(--ink)" }}>{CONTRACT_ADDRESS}</span>
-      <svg width="10" height="10" viewBox="0 0 12 12" fill="none" aria-hidden="true" style={{ color: copied ? "var(--acid)" : "var(--ink-30)", flexShrink: 0 }}>
+      <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.5625rem", letterSpacing: "0.06em", color: textColor }}>CA:</span>
+      <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.5625rem", letterSpacing: "0.04em", color: dark ? "rgba(255,255,255,0.8)" : "var(--ink)" }}>{CONTRACT_ADDRESS}</span>
+      <svg width="10" height="10" viewBox="0 0 12 12" fill="none" aria-hidden="true"
+        style={{ color: copied ? (dark ? "#7AB8FF" : "var(--acid)") : textColor, flexShrink: 0 }}>
         {copied ? (
           <path d="M2 6L5 9L10 3" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
         ) : (
@@ -58,14 +60,14 @@ function ContractChip() {
   );
 }
 
-function LogoMark({ size = 44 }: { size?: number }) {
+function LogoMark({ size = 52 }: { size?: number }) {
   return (
     <Image
       src="/luma-logo-01.jpg"
       alt="LUMA"
       width={size}
       height={size}
-      style={{ display: "block", flexShrink: 0, borderRadius: "8px" }}
+      style={{ display: "block", flexShrink: 0, borderRadius: "10px", boxShadow: "0 2px 12px rgba(0,0,0,0.18)" }}
       priority
     />
   );
@@ -75,10 +77,15 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const pathname = usePathname();
+  const isHome = pathname === "/";
 
-  const handleScroll = useCallback(() => { setScrolled(window.scrollY > 16); }, []);
+  // On home page: transparent until scrolled. On other pages: always solid.
+  const forceOpaque = !isHome;
+
+  const handleScroll = useCallback(() => { setScrolled(window.scrollY > 60); }, []);
   useEffect(() => {
     window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
     return () => window.removeEventListener("scroll", handleScroll);
   }, [handleScroll]);
   useEffect(() => {
@@ -95,16 +102,32 @@ export default function Navbar() {
   const isActive = (href: string) =>
     href !== "#" && (pathname === href || pathname.startsWith(href + "/"));
 
+  // Dark mode = transparent state on hero
+  const dark = !forceOpaque && !scrolled;
+
+  const navBg = forceOpaque
+    ? "rgba(242,244,248,0.98)"
+    : scrolled
+    ? "rgba(10,14,26,0.92)"
+    : "transparent";
+
+  const navBorder = forceOpaque
+    ? "1px solid var(--ink-10)"
+    : scrolled
+    ? "1px solid rgba(255,255,255,0.08)"
+    : "1px solid transparent";
+
   return (
     <>
       <nav
         style={{
           position: "fixed", top: 0, left: 0, right: 0, zIndex: 100,
           height: "var(--nav-h)",
-          background: scrolled ? "rgba(242,244,248,0.97)" : "rgba(242,244,248,0.92)",
-          borderBottom: "1px solid var(--ink-10)",
-          backdropFilter: "blur(14px)", WebkitBackdropFilter: "blur(14px)",
-          transition: "background 0.3s ease",
+          background: navBg,
+          borderBottom: navBorder,
+          backdropFilter: (scrolled || forceOpaque) ? "blur(18px)" : "none",
+          WebkitBackdropFilter: (scrolled || forceOpaque) ? "blur(18px)" : "none",
+          transition: "background 0.5s ease, border-color 0.5s ease, backdrop-filter 0.5s ease",
         }}
         aria-label="Main navigation"
       >
@@ -112,20 +135,19 @@ export default function Navbar() {
           height: "100%",
           display: "flex",
           alignItems: "center",
-          padding: "0 clamp(0.5rem, 2vw, 1.25rem)",
+          padding: "0 clamp(0.5rem, 2vw, 1.5rem)",
           maxWidth: "1440px",
           margin: "0 auto",
           width: "100%",
-          gap: "2rem",
+          gap: "1.75rem",
         }}>
-
-          {/* Logo only — text removed, logo already contains LUMA wordmark */}
+          {/* Logo — large, flush left */}
           <Link
             href="/"
             aria-label="LUMA home"
             style={{ display: "flex", alignItems: "center", textDecoration: "none", flexShrink: 0 }}
           >
-            <LogoMark size={36} />
+            <LogoMark size={52} />
           </Link>
 
           {/* Desktop nav links */}
@@ -137,17 +159,27 @@ export default function Navbar() {
                   key={link.label}
                   href={link.href}
                   style={{
-                    fontFamily: "var(--font-sans)", fontSize: "0.8125rem", fontWeight: 500,
+                    fontFamily: "var(--font-sans)", fontSize: "0.875rem", fontWeight: 500,
                     letterSpacing: "-0.01em",
-                    color: active ? "var(--ink)" : "var(--ink-60)",
+                    color: dark
+                      ? (active ? "#fff" : "rgba(255,255,255,0.65)")
+                      : (active ? "var(--ink)" : "var(--ink-60)"),
                     textDecoration: "none",
-                    padding: "0.375rem 0.75rem", borderRadius: "6px",
-                    background: active ? "var(--ink-06)" : "transparent",
-                    transition: "color 0.15s ease, background 0.15s ease",
+                    padding: "0.375rem 0.875rem", borderRadius: "6px",
+                    background: active
+                      ? (dark ? "rgba(255,255,255,0.12)" : "var(--ink-06)")
+                      : "transparent",
+                    transition: "color 0.2s ease, background 0.2s ease",
                     whiteSpace: "nowrap",
                   }}
-                  onMouseEnter={(e) => { if (!active) (e.currentTarget as HTMLElement).style.color = "var(--ink)"; }}
-                  onMouseLeave={(e) => { if (!active) (e.currentTarget as HTMLElement).style.color = "var(--ink-60)"; }}
+                  onMouseEnter={(e) => {
+                    if (!active) (e.currentTarget as HTMLElement).style.color = dark ? "#fff" : "var(--ink)";
+                    if (!active) (e.currentTarget as HTMLElement).style.background = dark ? "rgba(255,255,255,0.08)" : "var(--ink-06)";
+                  }}
+                  onMouseLeave={(e) => {
+                    if (!active) (e.currentTarget as HTMLElement).style.color = dark ? "rgba(255,255,255,0.65)" : "var(--ink-60)";
+                    if (!active) (e.currentTarget as HTMLElement).style.background = "transparent";
+                  }}
                 >
                   {link.label}
                 </Link>
@@ -155,18 +187,39 @@ export default function Navbar() {
             })}
           </div>
 
-          {/* Spacer */}
           <div style={{ flex: 1 }} />
 
           {/* Desktop right */}
           <div className="nav-right-desktop" style={{ display: "flex", alignItems: "center", gap: "0.5rem", flexShrink: 0 }}>
-            <ContractChip />
-            <Link href="/markets" className="btn btn-nav">Open the app →</Link>
+            <ContractChip dark={dark} />
+            <Link
+              href="/markets"
+              className="btn"
+              style={{
+                fontSize: "0.8125rem",
+                fontWeight: 600,
+                padding: "0.4375rem 1.125rem",
+                borderRadius: "6px",
+                background: dark ? "rgba(255,255,255,0.95)" : "var(--ink)",
+                color: dark ? "var(--ink)" : "var(--ivory)",
+                border: "none",
+                transition: "all 0.2s ease",
+                letterSpacing: "-0.01em",
+              }}
+            >
+              Open the app →
+            </Link>
           </div>
 
           {/* Mobile right */}
           <div className="nav-right-mobile" style={{ display: "none", alignItems: "center", gap: "0.5rem", marginLeft: "auto" }}>
-            <Link href="/markets" className="btn btn-nav" style={{ fontSize: "0.75rem", padding: "0.375rem 0.75rem" }}>App →</Link>
+            <Link href="/markets" style={{
+              fontFamily: "var(--font-sans)", fontSize: "0.75rem", fontWeight: 600,
+              padding: "0.375rem 0.75rem", borderRadius: "6px",
+              background: dark ? "rgba(255,255,255,0.95)" : "var(--ink)",
+              color: dark ? "var(--ink)" : "var(--ivory)",
+              textDecoration: "none",
+            }}>App →</Link>
             <button
               onClick={() => setMenuOpen((o) => !o)}
               aria-expanded={menuOpen}
@@ -177,7 +230,7 @@ export default function Navbar() {
               {[0, 1, 2].map((i) => (
                 <span key={i} style={{
                   display: "block", width: "20px", height: "1.5px",
-                  background: "var(--ink)", borderRadius: "1px",
+                  background: dark ? "rgba(255,255,255,0.85)" : "var(--ink)", borderRadius: "1px",
                   transition: "all 0.28s ease",
                   transform: menuOpen && i === 0 ? "rotate(45deg) translate(4.5px,4.5px)" : menuOpen && i === 2 ? "rotate(-45deg) translate(4.5px,-4.5px)" : "none",
                   opacity: menuOpen && i === 1 ? 0 : 1,
@@ -205,7 +258,7 @@ export default function Navbar() {
       >
         <div style={{ height: "var(--nav-h)", display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 1.25rem", borderBottom: "1px solid var(--ink-10)", flexShrink: 0 }}>
           <Link href="/" onClick={() => setMenuOpen(false)} style={{ display: "flex", alignItems: "center", textDecoration: "none" }}>
-            <LogoMark size={32} />
+            <LogoMark size={40} />
           </Link>
           <button onClick={() => setMenuOpen(false)} aria-label="Close menu" style={{ background: "none", border: "none", cursor: "pointer", padding: "4px" }}>
             <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
@@ -213,7 +266,6 @@ export default function Navbar() {
             </svg>
           </button>
         </div>
-
         <nav style={{ flex: 1, display: "flex", flexDirection: "column", padding: "1.75rem 1.5rem 0", overflowY: "auto" }}>
           {NAV_LINKS.map((link, i) => (
             <Link
@@ -233,22 +285,8 @@ export default function Navbar() {
             </Link>
           ))}
         </nav>
-
         <div style={{ padding: "1.25rem", display: "flex", flexDirection: "column", gap: "0.625rem", borderTop: "1px solid var(--ink-06)" }}>
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0.625rem 0.875rem", background: "var(--ink-06)", borderRadius: "6px", border: "1px solid var(--ink-10)", gap: "0.5rem", overflow: "hidden" }}>
-            <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.5rem", letterSpacing: "0.06em", color: "var(--ink-60)", flexShrink: 0 }}>CA</span>
-            <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.475rem", letterSpacing: "0.03em", color: "var(--ink)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{CONTRACT_ADDRESS}</span>
-            <button
-              onClick={() => navigator.clipboard?.writeText(CONTRACT_ADDRESS).catch(() => {})}
-              aria-label="Copy CA"
-              style={{ background: "none", border: "none", cursor: "pointer", padding: "2px", color: "var(--ink-60)", flexShrink: 0 }}
-            >
-              <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                <rect x="4" y="4" width="7" height="7" rx="1" stroke="currentColor" strokeWidth="1.2" />
-                <path d="M2 8V2H8" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
-              </svg>
-            </button>
-          </div>
+          <ContractChip />
           <Link href="/markets" className="btn btn-primary" style={{ justifyContent: "center", fontSize: "0.9375rem", padding: "0.875rem" }}>
             Open the app →
           </Link>

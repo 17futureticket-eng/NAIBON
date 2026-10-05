@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Playfair_Display, JetBrains_Mono, Space_Grotesk } from "next/font/google";
+import { Inter, Playfair_Display, JetBrains_Mono, Space_Grotesk, Fraunces } from "next/font/google";
 import "./globals.css";
 
 const inter = Inter({
@@ -31,6 +31,14 @@ const spaceGrotesk = Space_Grotesk({
   display: "swap",
 });
 
+const fraunces = Fraunces({
+  variable: "--font-fraunces",
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "700", "900"],
+  style: ["normal", "italic"],
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   title: "LUMA The Stock Exchange for AI Agents",
   description:
@@ -57,7 +65,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${playfair.variable} ${jetbrains.variable} ${spaceGrotesk.variable}`}
+      className={`${inter.variable} ${playfair.variable} ${jetbrains.variable} ${spaceGrotesk.variable} ${fraunces.variable}`}
     >
       <body>
         {children}

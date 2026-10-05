@@ -6,77 +6,99 @@ import Navbar from "@/components/sections/Navbar";
 import Footer from "@/components/sections/Footer";
 import ManifestPreviewPanel from "./ManifestPreviewPanel";
 import {
-  EMPTY_DRAFT, TEMPLATES, buildManifest, checkTicker, mintAgent, saveDraft, loadDraft, clearDraft,
-  type AgentDraft, type LaunchStep, type WalletTxStatus, type LaunchResult, type ToolCredential,
+  EMPTY_DRAFT, TEMPLATES, buildManifest, checkTicker, mintAgent,
+  saveDraft, loadDraft, clearDraft,
+  type AgentDraft, type LaunchStep, type WalletTxStatus, type LaunchResult,
 } from "@/lib/launch";
 
-/* ─── Step indicator ─── */
+/* ─── Step bar ─── */
 function StepBar({ step }: { step: LaunchStep }) {
-  const steps: { num: LaunchStep; label: string; short: string }[] = [
-    { num: 1, label: "IDENTITY",     short: "IDENTITY" },
-    { num: 2, label: "REVIEW + MINT", short: "REVIEW" },
-    { num: 3, label: "GO LIVE",       short: "GO LIVE" },
+  const steps = [
+    { num: 1 as LaunchStep, label: "Identity",     icon: "01" },
+    { num: 2 as LaunchStep, label: "Review & Mint", icon: "02" },
+    { num: 3 as LaunchStep, label: "Go Live",       icon: "03" },
   ];
   return (
-    <>
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", borderBottom: "1px solid var(--ink-10)" }}>
-        {steps.map((s) => {
-          const isActive = s.num === step;
-          const isDone   = s.num < step;
-          return (
-            <div key={s.num} className={`step-tab ${isActive ? "step-tab-active" : isDone ? "step-tab-done" : ""}`} style={{ padding: "0.875rem 0.75rem", gap: "0.5rem", minWidth: 0 }}>
-              <span className={`step-num ${isActive ? "step-num-active" : isDone ? "step-num-done" : "step-num-pending"}`} style={{ flexShrink: 0 }}>
-                {String(s.num).padStart(2, "0")}
-              </span>
-              <span className="step-label-full" style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{s.label}</span>
-              <span className="step-label-short" style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{s.short}</span>
-            </div>
-          );
-        })}
-      </div>
+    <div style={{ display: "flex", borderBottom: "1px solid rgba(255,255,255,0.07)" }}>
+      {steps.map((s, i) => {
+        const isActive = s.num === step;
+        const isDone   = s.num < step;
+        return (
+          <div key={s.num} style={{
+            flex: 1, display: "flex", alignItems: "center", gap: "0.625rem",
+            padding: "1rem 1.25rem",
+            borderRight: i < 2 ? "1px solid rgba(255,255,255,0.07)" : "none",
+            background: isActive ? "rgba(30,111,255,0.08)" : "transparent",
+            borderBottom: isActive ? "2px solid #1E6FFF" : "2px solid transparent",
+            transition: "all 0.2s ease",
+          }}>
+            <span style={{
+              width: "26px", height: "26px", borderRadius: "6px", flexShrink: 0,
+              display: "flex", alignItems: "center", justifyContent: "center",
+              fontFamily: "var(--font-mono)", fontSize: "0.5625rem", fontWeight: 700,
+              background: isActive ? "#1E6FFF" : isDone ? "rgba(30,111,255,0.2)" : "rgba(255,255,255,0.05)",
+              color: isActive ? "#fff" : isDone ? "#7AB8FF" : "rgba(255,255,255,0.2)",
+              border: isDone ? "1px solid rgba(30,111,255,0.3)" : "none",
+            }}>
+              {isDone ? "✓" : s.icon}
+            </span>
+            <span style={{
+              fontFamily: "var(--font-mono)", fontSize: "0.5625rem", letterSpacing: "0.1em",
+              textTransform: "uppercase",
+              color: isActive ? "#7AB8FF" : isDone ? "rgba(255,255,255,0.4)" : "rgba(255,255,255,0.2)",
+            }} className="step-label">
+              {s.label}
+            </span>
+          </div>
+        );
+      })}
       <style>{`
-        .step-label-short { display: none; }
-        @media (max-width: 480px) {
-          .step-label-full  { display: none; }
-          .step-label-short { display: block; }
-          .step-tab { padding: 0.75rem 0.5rem !important; font-size: 0.5rem !important; }
-        }
+        @media (max-width: 480px) { .step-label { display: none; } }
       `}</style>
-    </>
+    </div>
   );
 }
 
-/* ─── Step 1: Identity ─── */
-function Step1({
-  draft, setDraft, onNext,
-}: {
-  draft: AgentDraft;
-  setDraft: (d: AgentDraft) => void;
-  onNext: () => void;
+/* ─── Shared field styles ─── */
+const fieldLabel: React.CSSProperties = {
+  fontFamily: "var(--font-mono)", fontSize: "0.5rem", letterSpacing: "0.16em",
+  textTransform: "uppercase", color: "rgba(255,255,255,0.3)",
+  display: "block", marginBottom: "0.5rem",
+};
+const fieldHint: React.CSSProperties = {
+  fontFamily: "var(--font-mono)", fontSize: "0.5rem", letterSpacing: "0.08em",
+  color: "rgba(255,255,255,0.2)", marginTop: "0.375rem",
+};
+const inputBase: React.CSSProperties = {
+  width: "100%", background: "rgba(255,255,255,0.04)",
+  border: "1px solid rgba(255,255,255,0.1)", borderRadius: "6px",
+  padding: "0.75rem 1rem", fontFamily: "var(--font-mono)", fontSize: "0.875rem",
+  color: "#fff", outline: "none", transition: "border-color 0.2s ease",
+};
+
+/* ─── Step 1 ─── */
+function Step1({ draft, setDraft, onNext }: {
+  draft: AgentDraft; setDraft: (d: AgentDraft) => void; onNext: () => void;
 }) {
   const [tickerMsg, setTickerMsg] = useState("");
-  const [tickerOk, setTickerOk] = useState<boolean | null>(null);
-  const [checkingTicker, setCheckingTicker] = useState(false);
+  const [tickerOk, setTickerOk]   = useState<boolean | null>(null);
+  const [checking, setChecking]   = useState(false);
   const [descCount, setDescCount] = useState(draft.description.length);
-  const [credName, setCredName] = useState("");
-  const [credVal, setCredVal] = useState("");
+  const [credName, setCredName]   = useState("");
+  const [credVal, setCredVal]     = useState("");
   const [skillsOpen, setSkillsOpen] = useState(false);
 
   const upd = (patch: Partial<AgentDraft>) => {
     const next = { ...draft, ...patch };
-    setDraft(next);
-    saveDraft(next);
+    setDraft(next); saveDraft(next);
   };
 
-  // Debounced ticker check
   useEffect(() => {
     if (!draft.ticker) { setTickerMsg(""); setTickerOk(null); return; }
     const t = setTimeout(async () => {
-      setCheckingTicker(true);
+      setChecking(true);
       const res = await checkTicker(draft.ticker);
-      setTickerMsg(res.message);
-      setTickerOk(res.available);
-      setCheckingTicker(false);
+      setTickerMsg(res.message); setTickerOk(res.available); setChecking(false);
     }, 450);
     return () => clearTimeout(t);
   }, [draft.ticker]);
@@ -91,243 +113,172 @@ function Step1({
   const canAdvance = tickerOk === true && draft.description.trim().length > 0 && parseFloat(draft.pricePerCall) > 0;
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: "2.25rem" }}>
-      {/* Page header */}
+    <div style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
       <div>
-        <h1 style={{ fontFamily: "var(--font-display)", fontWeight: 400, fontSize: "clamp(1.75rem,4vw,2.5rem)", letterSpacing: "-0.025em", color: "var(--ink)", marginBottom: "0.5rem" }}>
-          name your agent
+        <h1 style={{ fontFamily: "var(--font-display)", fontWeight: 400, fontSize: "clamp(1.75rem,4vw,2.75rem)", letterSpacing: "-0.03em", color: "#fff", marginBottom: "0.5rem" }}>
+          Name your agent
         </h1>
-        <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.9rem", color: "var(--ink-60)", lineHeight: 1.65 }}>
-          ticker becomes its ENS subname under{" "}
-          <span style={{ fontFamily: "var(--font-mono)", color: "var(--ink)" }}>luma.sol</span>
-          {" "}+ the ERC-20 share symbol. permanent.
+        <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.9rem", color: "rgba(255,255,255,0.4)", lineHeight: 1.65 }}>
+          Ticker becomes the ENS subname under{" "}
+          <span style={{ fontFamily: "var(--font-mono)", color: "rgba(255,255,255,0.65)" }}>luma.sol</span>
+          {" "}and the ERC-20 share symbol. Permanent.
         </p>
       </div>
 
       {/* Templates */}
       <div>
-        <label className="field-label">START FROM A USEFUL AGENT · OPTIONAL</label>
+        <label style={fieldLabel}>Quick start · optional</label>
         <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
           {TEMPLATES.map((t) => (
-            <button
-              key={t.id}
-              className="template-chip"
-              onClick={() => {
-                upd({
-                  ticker: t.ticker,
-                  name: t.label,
-                  description: t.description,
-                  systemPrompt: t.systemPrompt,
-                  credentials: t.credentials,
-                });
+            <button key={t.id} onClick={() => upd({ ticker: t.ticker, name: t.label, description: t.description, systemPrompt: t.systemPrompt, credentials: t.credentials })}
+              style={{
+                padding: "0.375rem 0.875rem", borderRadius: "6px", cursor: "pointer",
+                fontFamily: "var(--font-mono)", fontSize: "0.5625rem", letterSpacing: "0.08em",
+                background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.1)",
+                color: "rgba(255,255,255,0.55)", transition: "all 0.15s ease",
               }}
-            >
-              {t.label}
-            </button>
+              onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(30,111,255,0.4)"; (e.currentTarget as HTMLElement).style.color = "#7AB8FF"; }}
+              onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.1)"; (e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.55)"; }}
+            >{t.label}</button>
           ))}
         </div>
-        <p className="field-hint" style={{ marginTop: "0.625rem" }}>
-          prefills the prompt + a 1Claw credential slot (the key is provisioned to 1Claw at launch, never to the{" "}
-          <span style={{ color: "var(--acid)" }}>model</span>).
-        </p>
       </div>
 
       {/* Ticker */}
       <div>
-        <label className="field-label" htmlFor="ticker">TICKER · MAX 8 CHARS</label>
+        <label style={fieldLabel} htmlFor="ticker">Ticker · max 8 chars</label>
         <div style={{ position: "relative" }}>
-          <input
-            id="ticker"
-            className={`field-input ${tickerOk === true ? "field-input-success" : tickerOk === false ? "field-input-error" : ""}`}
-            style={{ fontWeight: 600, fontSize: "1.125rem", letterSpacing: "0.06em", textTransform: "uppercase", paddingRight: "8rem" }}
-            maxLength={8}
-            placeholder="AGENT"
+          <input id="ticker"
+            style={{ ...inputBase, fontWeight: 700, fontSize: "1.125rem", letterSpacing: "0.1em", textTransform: "uppercase", paddingRight: "7rem",
+              borderColor: tickerOk === true ? "rgba(30,111,255,0.5)" : tickerOk === false ? "rgba(220,80,60,0.5)" : "rgba(255,255,255,0.1)",
+            }}
+            maxLength={8} placeholder="AGENT"
             value={draft.ticker}
             onChange={(e) => upd({ ticker: e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, "") })}
-            autoComplete="off"
-            spellCheck={false}
+            autoComplete="off" spellCheck={false}
           />
-          <div style={{ position: "absolute", right: "1rem", top: "50%", transform: "translateY(-50%)", fontFamily: "var(--font-mono)", fontSize: "0.75rem", color: "var(--ink-30)", pointerEvents: "none" }}>
-            .luma.sol
-          </div>
+          <span style={{ position: "absolute", right: "1rem", top: "50%", transform: "translateY(-50%)", fontFamily: "var(--font-mono)", fontSize: "0.625rem", color: "rgba(255,255,255,0.2)", pointerEvents: "none" }}>.luma.sol</span>
         </div>
-        <div className="field-hint" style={{ marginTop: "0.375rem", color: tickerOk === true ? "var(--acid)" : tickerOk === false ? "#D06050" : "var(--ink-30)" }}>
-          {checkingTicker ? "checking…" : tickerMsg || (draft.ticker ? "" : "pick a short symbol, e.g. WHALE")}
+        <div style={{ ...fieldHint, marginTop: "0.375rem", color: tickerOk === true ? "#7AB8FF" : tickerOk === false ? "#D06050" : "rgba(255,255,255,0.2)" }}>
+          {checking ? "checking…" : tickerMsg || (draft.ticker ? "" : "e.g. WHALE")}
         </div>
       </div>
 
       {/* Description */}
       <div>
-        <label className="field-label" htmlFor="desc">ONE-LINE DESCRIPTION · SHOWN ON MARKETS</label>
-        <input
-          id="desc"
-          className="field-input"
-          placeholder="e.g. Tracks whale wallets on EVM chains"
-          maxLength={200}
-          value={draft.description}
+        <label style={fieldLabel} htmlFor="desc">One-line description · shown on markets</label>
+        <input id="desc" style={inputBase} placeholder="e.g. Tracks whale wallets on EVM chains"
+          maxLength={200} value={draft.description}
           onChange={(e) => { upd({ description: e.target.value }); setDescCount(e.target.value.length); }}
         />
-        <div className="field-hint">{descCount}/200 chars</div>
+        <div style={fieldHint}>{descCount}/200</div>
       </div>
 
-      {/* per call price */}
+      {/* Price */}
       <div>
-        <label className="field-label" htmlFor="price">per call PRICE</label>
+        <label style={fieldLabel} htmlFor="price">Per-call price</label>
         <div style={{ position: "relative" }}>
-          <span style={{ position: "absolute", left: "1rem", top: "50%", transform: "translateY(-50%)", fontFamily: "var(--font-mono)", fontSize: "0.875rem", color: "var(--ink-60)", pointerEvents: "none" }}>$</span>
-          <input
-            id="price"
-            className="field-input"
-            style={{ paddingLeft: "1.75rem", paddingRight: "4.5rem" }}
-            type="number"
-            min="0.01"
-            step="0.01"
+          <span style={{ position: "absolute", left: "1rem", top: "50%", transform: "translateY(-50%)", fontFamily: "var(--font-mono)", fontSize: "0.875rem", color: "rgba(255,255,255,0.3)", pointerEvents: "none" }}>$</span>
+          <input id="price" style={{ ...inputBase, paddingLeft: "1.75rem", paddingRight: "4.5rem" }}
+            type="number" min="0.01" step="0.01"
             value={draft.pricePerCall}
             onChange={(e) => upd({ pricePerCall: e.target.value })}
           />
-          <div style={{ position: "absolute", right: "1rem", top: "50%", transform: "translateY(-50%)", fontFamily: "var(--font-mono)", fontSize: "0.75rem", color: "var(--ink-30)", pointerEvents: "none" }}>USDC</div>
+          <span style={{ position: "absolute", right: "1rem", top: "50%", transform: "translateY(-50%)", fontFamily: "var(--font-mono)", fontSize: "0.625rem", color: "rgba(255,255,255,0.2)", pointerEvents: "none" }}>USDC</span>
         </div>
-        <p className="field-hint">
-          you receive{" "}
-          <span style={{ color: "var(--acid)", fontWeight: 500 }}>${parseFloat(draft.pricePerCall || "0").toFixed(2)}</span>
-          {" "}per call · runtime{" "}
-          <span style={{ color: "var(--ink)" }}>hermes</span>
-          {" "}on 0G compute · intel TDX (deepseek v3, every reply TEE-signed)
+        <p style={fieldHint}>
+          You receive{" "}
+          <span style={{ color: "#7AB8FF" }}>${parseFloat(draft.pricePerCall || "0").toFixed(2)}</span>
+          {" "}per call · hermes runtime on 0G compute · Intel TDX
         </p>
       </div>
 
       {/* Runtime */}
       <div>
-        <label className="field-label">RUNTIME</label>
-        <div style={{ display: "flex", gap: "0.625rem" }}>
+        <label style={fieldLabel}>Runtime</label>
+        <div style={{ display: "flex", gap: "0.5rem" }}>
           {(["hermes", "raw"] as const).map((r) => (
-            <button
-              key={r}
-              onClick={() => upd({ runtime: r })}
+            <button key={r} onClick={() => upd({ runtime: r })}
               style={{
-                padding: "0.625rem 1.125rem", borderRadius: "2px",
+                padding: "0.625rem 1.375rem", borderRadius: "6px", cursor: "pointer",
                 fontFamily: "var(--font-mono)", fontSize: "0.6875rem", letterSpacing: "0.1em",
-                cursor: "pointer", transition: "all 0.15s ease",
-                background: draft.runtime === r ? "var(--ink)" : "transparent",
-                color: draft.runtime === r ? "var(--ivory)" : "var(--ink-60)",
-                border: `1px solid ${draft.runtime === r ? "var(--ink)" : "var(--ink-10)"}`,
+                transition: "all 0.15s ease",
+                background: draft.runtime === r ? "#1E6FFF" : "rgba(255,255,255,0.04)",
+                color: draft.runtime === r ? "#fff" : "rgba(255,255,255,0.4)",
+                border: `1px solid ${draft.runtime === r ? "#1E6FFF" : "rgba(255,255,255,0.1)"}`,
               }}
-            >
-              {r}
-            </button>
+            >{r}</button>
           ))}
         </div>
       </div>
 
       {/* System prompt */}
       <div>
-        <label className="field-label" htmlFor="prompt">SYSTEM PROMPT · THIS IS THE AGENT</label>
-        <textarea
-          id="prompt"
-          className="field-textarea"
-          placeholder={"You are describe the agent's role, expertise, tone, and how it should use its tools.\nHermes grows skills from here."}
+        <label style={fieldLabel} htmlFor="prompt">System prompt · this is the agent</label>
+        <textarea id="prompt"
+          style={{ ...inputBase, resize: "vertical", minHeight: "140px", lineHeight: 1.7, fontSize: "0.8125rem" }}
+          placeholder={"Describe the agent's role, expertise, and tools.\nHermes evolves from here."}
           value={draft.systemPrompt}
           onChange={(e) => upd({ systemPrompt: e.target.value })}
-          rows={7}
+          rows={6}
         />
-        <div className="field-hint">{draft.systemPrompt.length} chars · seeds the Hermes agent dir; it self improves from here</div>
+        <div style={fieldHint}>{draft.systemPrompt.length} chars</div>
       </div>
 
-      {/* Tool credentials */}
+      {/* Credentials */}
       <div>
-        <label className="field-label">TOOL CREDENTIALS · OPTIONAL</label>
-        <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.8125rem", color: "var(--ink-60)", lineHeight: 1.6, marginBottom: "0.75rem" }}>
-          API keys your agent&apos;s tools need (e.g. a messari or elevenlabs key). Saved to{" "}
-          <span style={{ fontFamily: "var(--font-mono)", color: "var(--ink)" }}>1Claw&apos;s cloud HSM</span>
-          {" "}at launch and fetched just in time at the tool layer  {" "}
-          <strong style={{ fontWeight: 600 }}>never</strong> placed in the model&apos;s context, the manifest, or receipts.
+        <label style={fieldLabel}>Tool credentials · optional</label>
+        <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.8125rem", color: "rgba(255,255,255,0.3)", lineHeight: 1.6, marginBottom: "0.75rem" }}>
+          API keys your agent needs. Saved to 1Claw cloud HSM — never placed in model context.
         </p>
-        {draft.credentials.length === 0 && (
-          <p className="field-hint" style={{ marginBottom: "0.75rem" }}>none yet add one only if a tool calls a private/paid API.</p>
-        )}
         <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem", marginBottom: "0.75rem" }}>
           {draft.credentials.map((c) => (
-            <div key={c.id} className="credential-item">
+            <div key={c.id} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0.625rem 0.875rem", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: "6px" }}>
               <div>
-                <div style={{ fontFamily: "var(--font-mono)", fontSize: "0.6875rem", color: "var(--ink)", letterSpacing: "0.06em" }}>{c.name}</div>
-                <div style={{ fontFamily: "var(--font-mono)", fontSize: "0.5625rem", color: "var(--ink-30)", letterSpacing: "0.08em", marginTop: "2px" }}>●●●●●●●●</div>
+                <div style={{ fontFamily: "var(--font-mono)", fontSize: "0.6875rem", color: "rgba(255,255,255,0.7)", letterSpacing: "0.06em" }}>{c.name}</div>
+                <div style={{ fontFamily: "var(--font-mono)", fontSize: "0.5rem", color: "rgba(255,255,255,0.2)", marginTop: "2px" }}>●●●●●●●●</div>
               </div>
-              <button
-                onClick={() => removeCred(c.id)}
-                style={{ background: "none", border: "none", cursor: "pointer", fontFamily: "var(--font-mono)", fontSize: "0.5625rem", color: "var(--ink-30)", letterSpacing: "0.1em" }}
-              >
-                REMOVE
-              </button>
+              <button onClick={() => removeCred(c.id)} style={{ background: "none", border: "none", cursor: "pointer", fontFamily: "var(--font-mono)", fontSize: "0.5rem", color: "rgba(255,255,255,0.2)", letterSpacing: "0.1em" }}>REMOVE</button>
             </div>
           ))}
         </div>
-        {/* Add credential inline form */}
         <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
-          <input
-            className="field-input"
-            style={{ flex: "1 1 140px", fontSize: "0.8125rem" }}
-            placeholder="KEY_NAME"
-            value={credName}
-            onChange={(e) => setCredName(e.target.value.toUpperCase().replace(/\s/g, "_"))}
-          />
-          <input
-            className="field-input"
-            style={{ flex: "2 1 200px", fontSize: "0.8125rem" }}
-            placeholder="sk-…"
-            type="password"
-            value={credVal}
-            onChange={(e) => setCredVal(e.target.value)}
-          />
-          <button
-            onClick={addCred}
-            className="btn btn-ghost"
-            style={{ fontSize: "0.75rem", padding: "0.625rem 1rem", whiteSpace: "nowrap" }}
-            disabled={!credName.trim()}
-          >
-            + add credential
+          <input style={{ ...inputBase, flex: "1 1 130px", fontSize: "0.8125rem" }} placeholder="KEY_NAME"
+            value={credName} onChange={(e) => setCredName(e.target.value.toUpperCase().replace(/\s/g, "_"))} />
+          <input style={{ ...inputBase, flex: "2 1 200px", fontSize: "0.8125rem" }} placeholder="sk-…" type="password"
+            value={credVal} onChange={(e) => setCredVal(e.target.value)} />
+          <button onClick={addCred} disabled={!credName.trim()}
+            style={{ padding: "0.625rem 1rem", borderRadius: "6px", cursor: credName.trim() ? "pointer" : "not-allowed", fontFamily: "var(--font-mono)", fontSize: "0.625rem", letterSpacing: "0.08em", background: "rgba(30,111,255,0.15)", border: "1px solid rgba(30,111,255,0.25)", color: credName.trim() ? "#7AB8FF" : "rgba(255,255,255,0.2)", whiteSpace: "nowrap", opacity: credName.trim() ? 1 : 0.5, transition: "all 0.15s ease" }}>
+            + add
           </button>
         </div>
       </div>
 
-      {/* Skills (collapsible) */}
+      {/* Skills collapsible */}
       <div>
-        <button
-          onClick={() => setSkillsOpen((o) => !o)}
-          style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%", background: "var(--ivory-dark)", border: "1px solid var(--ink-10)", borderRadius: "2px", padding: "0.75rem 1rem", cursor: "pointer" }}
-        >
+        <button onClick={() => setSkillsOpen((o) => !o)}
+          style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%", background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: "6px", padding: "0.75rem 1rem", cursor: "pointer" }}>
           <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-            <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.5625rem", letterSpacing: "0.1em", color: "var(--ink-60)" }}>▶ skills · bundled into manifest</span>
-            <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.5625rem", letterSpacing: "0.12em", color: "var(--acid)", background: "rgba(30,111,255,0.12)", border: "1px solid rgba(30,111,255,0.25)", padding: "0.1rem 0.4rem", borderRadius: "2px" }}>
-              {draft.skills.length} SKILLS
-            </span>
+            <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.5rem", letterSpacing: "0.1em", color: "rgba(255,255,255,0.4)" }}>Skills · bundled into manifest</span>
+            <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.4375rem", letterSpacing: "0.12em", color: "#7AB8FF", background: "rgba(30,111,255,0.12)", border: "1px solid rgba(30,111,255,0.2)", padding: "0.1rem 0.4rem", borderRadius: "3px" }}>{draft.skills.length} SKILLS</span>
           </div>
-          <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.5625rem", letterSpacing: "0.12em", color: "var(--ink-30)" }}>
-            {skillsOpen ? "COLLAPSE" : "EXPAND"}
-          </span>
+          <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.4375rem", letterSpacing: "0.12em", color: "rgba(255,255,255,0.2)" }}>{skillsOpen ? "▲" : "▼"}</span>
         </button>
         {skillsOpen && (
-          <div style={{ border: "1px solid var(--ink-10)", borderTop: "none", padding: "1rem", borderRadius: "0 0 2px 2px" }}>
-            <p className="field-hint">Skills are bundled into the manifest at mint time. Hermes grows them automatically from the system prompt.</p>
+          <div style={{ border: "1px solid rgba(255,255,255,0.08)", borderTop: "none", padding: "1rem", borderRadius: "0 0 6px 6px", background: "rgba(255,255,255,0.02)" }}>
+            <p style={fieldHint}>Hermes generates skills automatically from the system prompt at mint time.</p>
           </div>
         )}
       </div>
 
       {/* Footer */}
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", paddingTop: "1rem", borderTop: "1px solid var(--ink-10)", flexWrap: "wrap", gap: "0.625rem" }}>
-        <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.475rem", letterSpacing: "0.08em", color: "var(--ink-30)" }}>
-          auto-saved · hash recomputes on every edit
-        </span>
-        <div style={{ display: "flex", gap: "0.625rem", alignItems: "center", flexWrap: "wrap" }}>
-          <Link href="/markets" className="btn btn-ghost" style={{ fontSize: "0.8125rem", padding: "0.625rem 1rem" }}>
-            cancel
-          </Link>
-          <button
-            className="btn btn-primary"
-            onClick={onNext}
-            disabled={!canAdvance}
-            style={{ opacity: canAdvance ? 1 : 0.4, cursor: canAdvance ? "pointer" : "not-allowed" }}
-          >
-            review + mint →
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", paddingTop: "1.25rem", borderTop: "1px solid rgba(255,255,255,0.07)", flexWrap: "wrap", gap: "0.75rem" }}>
+        <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.4375rem", letterSpacing: "0.08em", color: "rgba(255,255,255,0.2)" }}>auto-saved · hash recomputes on every edit</span>
+        <div style={{ display: "flex", gap: "0.625rem", alignItems: "center" }}>
+          <Link href="/markets" style={{ padding: "0.625rem 1.125rem", borderRadius: "6px", fontFamily: "var(--font-sans)", fontSize: "0.8125rem", fontWeight: 500, border: "1px solid rgba(255,255,255,0.1)", color: "rgba(255,255,255,0.5)", textDecoration: "none", transition: "all 0.15s ease" }}>cancel</Link>
+          <button onClick={onNext} disabled={!canAdvance}
+            style={{ padding: "0.625rem 1.5rem", borderRadius: "6px", fontFamily: "var(--font-sans)", fontSize: "0.875rem", fontWeight: 700, background: canAdvance ? "rgba(255,255,255,0.95)" : "rgba(255,255,255,0.08)", color: canAdvance ? "var(--ink)" : "rgba(255,255,255,0.2)", border: "none", cursor: canAdvance ? "pointer" : "not-allowed", opacity: canAdvance ? 1 : 0.6, transition: "all 0.2s ease" }}>
+            Review + mint →
           </button>
         </div>
       </div>
@@ -335,163 +286,141 @@ function Step1({
   );
 }
 
-/* ─── Step 2: Review + Mint ─── */
-function Step2({
-  draft, onBack, onMint, txStatus,
-}: {
-  draft: AgentDraft;
-  onBack: () => void;
-  onMint: () => void;
-  txStatus: WalletTxStatus;
+/* ─── Step 2 ─── */
+function Step2({ draft, onBack, onMint, txStatus }: {
+  draft: AgentDraft; onBack: () => void; onMint: () => void; txStatus: WalletTxStatus;
 }) {
   const isProcessing = txStatus === "confirm" || txStatus === "pending";
-
   const txLabel: Record<WalletTxStatus, string> = {
-    idle: "mint agent →",
-    connecting: "connecting…",
-    confirm: "confirm in wallet…",
-    pending: "pending…",
-    confirmed: "confirmed ✓",
-    failed: "failed retry",
+    idle: "Mint agent →", connecting: "Connecting…", confirm: "Confirm in wallet…",
+    pending: "Pending…", confirmed: "Confirmed ✓", failed: "Failed — retry",
   };
-
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
       <div>
-        <h2 style={{ fontFamily: "var(--font-display)", fontWeight: 400, fontSize: "clamp(1.5rem,3vw,2.25rem)", letterSpacing: "-0.025em", color: "var(--ink)", marginBottom: "0.5rem" }}>
-          review before minting
+        <h2 style={{ fontFamily: "var(--font-display)", fontWeight: 400, fontSize: "clamp(1.5rem,3vw,2.25rem)", letterSpacing: "-0.025em", color: "#fff", marginBottom: "0.5rem" }}>
+          Review before minting
         </h2>
-        <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.9rem", color: "var(--ink-60)", lineHeight: 1.6 }}>
-          Once minted, the ticker and domain are permanent. Review everything carefully.
+        <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.9rem", color: "rgba(255,255,255,0.4)", lineHeight: 1.6 }}>
+          Once minted, ticker and domain are permanent.
         </p>
       </div>
 
-      {/* Review grid */}
-      <div style={{ border: "1px solid var(--ink-10)", borderRadius: "3px", overflow: "hidden" }}>
+      {/* Review table */}
+      <div style={{ border: "1px solid rgba(255,255,255,0.08)", borderRadius: "8px", overflow: "hidden" }}>
         {[
-          { k: "Ticker", v: `${draft.ticker}.luma.sol` },
+          { k: "Ticker",      v: `${draft.ticker}.luma.sol` },
           { k: "Description", v: draft.description },
-          { k: "per call price", v: `$${parseFloat(draft.pricePerCall).toFixed(2)} USDC` },
-          { k: "Runtime", v: draft.runtime },
+          { k: "Price",       v: `$${parseFloat(draft.pricePerCall).toFixed(2)} USDC per call` },
+          { k: "Runtime",     v: draft.runtime },
           { k: "Credentials", v: draft.credentials.length > 0 ? `${draft.credentials.length} key(s) → 1Claw HSM` : "none" },
-          { k: "Skills", v: draft.skills.length > 0 ? draft.skills.map((s) => s.name).join(", ") : "hermes auto-generates" },
-          { k: "System prompt", v: draft.systemPrompt ? `${draft.systemPrompt.slice(0, 120)}…` : "none" },
-        ].map((row, i) => (
-          <div key={row.k} style={{ display: "grid", gridTemplateColumns: "140px 1fr", padding: "0.875rem 1.25rem", borderBottom: i < 6 ? "1px solid var(--ink-06)" : "none", alignItems: "start" }}>
-            <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.5625rem", letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--ink-30)" }}>{row.k}</span>
-            <span style={{ fontFamily: "var(--font-sans)", fontSize: "0.875rem", color: "var(--ink)", lineHeight: 1.5, wordBreak: "break-word" }}>{row.v}</span>
+          { k: "Skills",      v: draft.skills.length > 0 ? draft.skills.map((s) => s.name).join(", ") : "hermes auto-generates" },
+          { k: "Prompt",      v: draft.systemPrompt ? `${draft.systemPrompt.slice(0, 120)}…` : "none" },
+        ].map((row, i, arr) => (
+          <div key={row.k} style={{ display: "grid", gridTemplateColumns: "120px 1fr", padding: "0.875rem 1.25rem", borderBottom: i < arr.length - 1 ? "1px solid rgba(255,255,255,0.05)" : "none", alignItems: "start", background: i % 2 === 0 ? "rgba(255,255,255,0.01)" : "transparent" }}>
+            <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.5rem", letterSpacing: "0.12em", textTransform: "uppercase", color: "rgba(255,255,255,0.25)" }}>{row.k}</span>
+            <span style={{ fontFamily: "var(--font-sans)", fontSize: "0.875rem", color: "rgba(255,255,255,0.75)", lineHeight: 1.5, wordBreak: "break-word" }}>{row.v}</span>
           </div>
         ))}
       </div>
 
       {/* Warning */}
-      <div style={{ background: "rgba(30,111,255,0.07)", border: "1px solid rgba(30,111,255,0.20)", borderRadius: "3px", padding: "1rem 1.25rem" }}>
-        <p style={{ fontFamily: "var(--font-mono)", fontSize: "0.5625rem", letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--ink-60)", lineHeight: 1.8 }}>
-          Minting will: (1) deploy your agent iNFT on chain, (2) register the ENS subname, (3) open the IPO.
-          Gas fees apply. The ticker is permanent once minted.
+      <div style={{ background: "rgba(30,111,255,0.08)", border: "1px solid rgba(30,111,255,0.18)", borderRadius: "8px", padding: "1rem 1.25rem" }}>
+        <p style={{ fontFamily: "var(--font-mono)", fontSize: "0.5rem", letterSpacing: "0.08em", color: "rgba(122,184,255,0.65)", lineHeight: 1.9 }}>
+          Minting will: (1) deploy your agent iNFT on-chain, (2) register the ENS subname, (3) open the IPO.
+          Gas fees apply. Ticker is permanent once minted.
         </p>
       </div>
 
-      {/* Transaction status */}
+      {/* TX pending */}
       {txStatus === "pending" && (
-        <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", padding: "1rem 1.25rem", border: "1px solid var(--ink-10)", borderRadius: "3px" }}>
-          <div style={{ width: "10px", height: "10px", borderRadius: "50%", border: "2px solid var(--acid)", borderTopColor: "transparent", animation: "spin 0.8s linear infinite" }} />
-          <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.625rem", letterSpacing: "0.1em", color: "var(--ink-60)" }}>transaction submitted · waiting for confirmation…</span>
+        <div style={{ display: "flex", alignItems: "center", gap: "0.875rem", padding: "1rem 1.25rem", border: "1px solid rgba(30,111,255,0.2)", borderRadius: "8px", background: "rgba(30,111,255,0.06)" }}>
+          <div style={{ width: "10px", height: "10px", borderRadius: "50%", border: "2px solid #7AB8FF", borderTopColor: "transparent", animation: "spin 0.8s linear infinite", flexShrink: 0 }} />
+          <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.5625rem", letterSpacing: "0.1em", color: "rgba(122,184,255,0.7)" }}>Transaction submitted · waiting for confirmation…</span>
         </div>
       )}
 
-      {/* Buttons */}
       <div style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap" }}>
-        <button
-          onClick={onBack}
-          className="btn btn-ghost"
-          disabled={isProcessing}
-          style={{ opacity: isProcessing ? 0.4 : 1 }}
-        >
-          ← back
+        <button onClick={onBack} disabled={isProcessing}
+          style={{ padding: "0.75rem 1.375rem", borderRadius: "6px", fontFamily: "var(--font-sans)", fontSize: "0.875rem", fontWeight: 500, border: "1px solid rgba(255,255,255,0.1)", background: "transparent", color: "rgba(255,255,255,0.55)", cursor: isProcessing ? "not-allowed" : "pointer", opacity: isProcessing ? 0.4 : 1, transition: "all 0.15s ease" }}>
+          ← Back
         </button>
-        <button
-          onClick={onMint}
-          className="btn btn-primary"
-          disabled={isProcessing || txStatus === "confirmed"}
-          style={{ flex: 1, justifyContent: "center", opacity: txStatus === "confirmed" ? 0.6 : 1 }}
-        >
+        <button onClick={onMint} disabled={isProcessing || txStatus === "confirmed"}
+          style={{ flex: 1, padding: "0.75rem 1.5rem", borderRadius: "6px", fontFamily: "var(--font-sans)", fontSize: "0.9375rem", fontWeight: 700, background: isProcessing || txStatus === "confirmed" ? "rgba(255,255,255,0.08)" : "rgba(255,255,255,0.95)", color: isProcessing || txStatus === "confirmed" ? "rgba(255,255,255,0.3)" : "var(--ink)", border: "none", cursor: isProcessing || txStatus === "confirmed" ? "not-allowed" : "pointer", transition: "all 0.2s ease" }}>
           {txLabel[txStatus]}
         </button>
       </div>
-
       <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
     </div>
   );
 }
 
-/* ─── Step 3: Go Live ─── */
-function Step3({ result, draft, onReset }: { result: LaunchResult; draft: AgentDraft; onReset: () => void }) {
+/* ─── Step 3 ─── */
+function Step3({ result, onReset }: { result: LaunchResult; draft: AgentDraft; onReset: () => void }) {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
-      {/* Success banner */}
-      <div style={{ textAlign: "center", padding: "2rem 1rem" }}>
-        <div style={{ width: "48px", height: "48px", borderRadius: "50%", background: "rgba(30,111,255,0.15)", border: "2px solid var(--acid)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 1.25rem" }}>
-          <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true">
-            <path d="M5 11L9 15L17 7" stroke="var(--acid)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+      {/* Success */}
+      <div style={{ textAlign: "center", padding: "2.5rem 1rem" }}>
+        <div style={{
+          width: "64px", height: "64px", borderRadius: "50%",
+          background: "radial-gradient(circle, rgba(30,111,255,0.25) 0%, rgba(30,111,255,0.05) 100%)",
+          border: "1.5px solid rgba(30,111,255,0.4)",
+          display: "flex", alignItems: "center", justifyContent: "center",
+          margin: "0 auto 1.5rem",
+          boxShadow: "0 0 32px rgba(30,111,255,0.2)",
+        }}>
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+            <path d="M6 14L11 19L22 8" stroke="#7AB8FF" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
         </div>
-        <h2 style={{ fontFamily: "var(--font-display)", fontWeight: 400, fontSize: "clamp(1.5rem,3vw,2.25rem)", letterSpacing: "-0.025em", color: "var(--ink)", marginBottom: "0.5rem" }}>
+        <h2 style={{ fontFamily: "var(--font-display)", fontWeight: 400, fontSize: "clamp(1.75rem,4vw,2.75rem)", letterSpacing: "-0.03em", color: "#fff", marginBottom: "0.75rem" }}>
           {result.ticker} is live.
         </h2>
-        <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.9375rem", color: "var(--ink-60)", lineHeight: 1.65, maxWidth: "400px", margin: "0 auto" }}>
+        <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.9375rem", color: "rgba(255,255,255,0.4)", lineHeight: 1.65, maxWidth: "420px", margin: "0 auto" }}>
           Your agent is deployed, the ENS is reserved, and the IPO is open. Share it with the world.
         </p>
       </div>
 
-      {/* Result details */}
-      <div style={{ border: "1px solid var(--ink-10)", borderRadius: "3px", overflow: "hidden" }}>
+      {/* Result table */}
+      <div style={{ border: "1px solid rgba(255,255,255,0.08)", borderRadius: "8px", overflow: "hidden" }}>
         {[
-          { k: "Ticker", v: result.ticker },
-          { k: "Domain", v: result.ens },
-          { k: "iNFT Token ID", v: result.inftTokenId },
-          { k: "Contract", v: result.contractAddress },
-          { k: "TX Hash", v: result.txHash },
-          { k: "Network", v: result.network },
-          { k: "Share price", v: result.sharePrice },
-        ].map((row, i) => (
-          <div key={row.k} style={{ display: "grid", gridTemplateColumns: "130px 1fr", padding: "0.875rem 1.25rem", borderBottom: i < 6 ? "1px solid var(--ink-06)" : "none", alignItems: "center" }}>
-            <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.5625rem", letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--ink-30)" }}>{row.k}</span>
-            <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.6875rem", color: "var(--ink)", wordBreak: "break-all" }}>{row.v}</span>
+          { k: "Ticker",       v: result.ticker },
+          { k: "Domain",       v: result.ens },
+          { k: "iNFT Token ID",v: result.inftTokenId },
+          { k: "Contract",     v: result.contractAddress },
+          { k: "TX Hash",      v: result.txHash },
+          { k: "Network",      v: result.network },
+          { k: "Share price",  v: result.sharePrice },
+        ].map((row, i, arr) => (
+          <div key={row.k} style={{ display: "grid", gridTemplateColumns: "120px 1fr", padding: "0.875rem 1.25rem", borderBottom: i < arr.length - 1 ? "1px solid rgba(255,255,255,0.05)" : "none", alignItems: "center", background: i % 2 === 0 ? "rgba(255,255,255,0.01)" : "transparent" }}>
+            <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.5rem", letterSpacing: "0.12em", textTransform: "uppercase", color: "rgba(255,255,255,0.25)" }}>{row.k}</span>
+            <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.6875rem", color: "rgba(122,184,255,0.85)", wordBreak: "break-all" }}>{row.v}</span>
           </div>
         ))}
       </div>
 
-      {/* CTAs */}
       <div style={{ display: "flex", flexWrap: "wrap", gap: "0.75rem" }}>
-        <Link href="/markets" className="btn btn-primary" style={{ flex: 1, justifyContent: "center" }}>
-          view in markets →
+        <Link href="/markets" style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", padding: "0.875rem", borderRadius: "6px", fontFamily: "var(--font-sans)", fontSize: "0.9375rem", fontWeight: 700, background: "rgba(255,255,255,0.95)", color: "var(--ink)", textDecoration: "none" }}>
+          View in markets →
         </Link>
-        <button onClick={onReset} className="btn btn-ghost" style={{ flex: 1, justifyContent: "center" }}>
-          launch another
+        <button onClick={onReset} style={{ flex: 1, padding: "0.875rem", borderRadius: "6px", fontFamily: "var(--font-sans)", fontSize: "0.9375rem", fontWeight: 500, border: "1px solid rgba(255,255,255,0.12)", background: "transparent", color: "rgba(255,255,255,0.55)", cursor: "pointer" }}>
+          Launch another
         </button>
       </div>
     </div>
   );
 }
 
-/* ─── Main LaunchClient ─── */
+/* ─── Main ─── */
 export default function LaunchClient() {
-  const [step, setStep] = useState<LaunchStep>(1);
-  const [draft, setDraftState] = useState<AgentDraft>(EMPTY_DRAFT);
-  const [txStatus, setTxStatus] = useState<WalletTxStatus>("idle");
-  const [launchResult, setLaunchResult] = useState<LaunchResult | null>(null);
+  const [step, setStep]             = useState<LaunchStep>(1);
+  const [draft, setDraftState]      = useState<AgentDraft>(EMPTY_DRAFT);
+  const [txStatus, setTxStatus]     = useState<WalletTxStatus>("idle");
+  const [launchResult, setResult]   = useState<LaunchResult | null>(null);
 
-  // Load saved draft on mount
-  useEffect(() => {
-    const saved = loadDraft();
-    if (saved) setDraftState(saved);
-  }, []);
+  useEffect(() => { const s = loadDraft(); if (s) setDraftState(s); }, []);
 
-  const setDraft = useCallback((d: AgentDraft) => {
-    setDraftState(d);
-    saveDraft(d);
-  }, []);
+  const setDraft = useCallback((d: AgentDraft) => { setDraftState(d); saveDraft(d); }, []);
 
   const manifest = buildManifest(draft);
   const manifestValid = !!draft.ticker && parseFloat(draft.pricePerCall) > 0;
@@ -500,65 +429,93 @@ export default function LaunchClient() {
     setTxStatus("connecting");
     try {
       const result = await mintAgent(draft, setTxStatus);
-      setLaunchResult(result);
-      clearDraft();
-      setStep(3);
-    } catch {
-      setTxStatus("failed");
-    }
+      setResult(result); clearDraft(); setStep(3);
+    } catch { setTxStatus("failed"); }
   };
 
-  const handleReset = () => {
-    setDraftState(EMPTY_DRAFT);
-    setTxStatus("idle");
-    setLaunchResult(null);
-    setStep(1);
-  };
+  const handleReset = () => { setDraftState(EMPTY_DRAFT); setTxStatus("idle"); setResult(null); setStep(1); };
 
   return (
-    <div style={{ minHeight: "100vh", background: "var(--ivory)" }}>
+    <div style={{ minHeight: "100vh", background: "var(--onyx)" }}>
       <Navbar />
       <main style={{ paddingTop: "var(--nav-h)" }}>
-        {/* Step bar */}
-        <div className="container-wide" style={{ paddingTop: "1.25rem", paddingBottom: "0" }}>
-          <div style={{ border: "1px solid var(--ink-10)", borderRadius: "3px 3px 0 0", overflow: "hidden" }}>
-            <StepBar step={step} />
+
+        {/* Dark page header */}
+        <div style={{ background: "linear-gradient(180deg, rgba(14,18,36,1) 0%, rgba(10,14,26,0.97) 100%)", borderBottom: "1px solid rgba(255,255,255,0.06)", padding: "2rem 0 0" }}>
+          <div className="container-wide">
+            <div style={{ marginBottom: "1.5rem" }}>
+              <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.5rem", letterSpacing: "0.18em", textTransform: "uppercase", color: "rgba(255,255,255,0.25)", display: "block", marginBottom: "0.5rem" }}>
+                LUMA · LAUNCH
+              </span>
+              <h1 style={{ fontFamily: "var(--font-display)", fontWeight: 400, fontSize: "clamp(1.5rem,3vw,2.25rem)", letterSpacing: "-0.03em", color: "#fff", margin: 0 }}>
+                Deploy your agent
+              </h1>
+            </div>
+            {/* Step bar lives inside the dark header */}
+            <div style={{ border: "1px solid rgba(255,255,255,0.07)", borderBottom: "none", borderRadius: "8px 8px 0 0", overflow: "hidden" }}>
+              <StepBar step={step} />
+            </div>
           </div>
         </div>
 
-        {/* Two-column layout */}
-        <div className="container-wide" style={{ paddingTop: "0", paddingBottom: "3rem" }}>
-          <div style={{ border: "1px solid var(--ink-10)", borderTop: "none", borderRadius: "0 0 3px 3px", display: "grid", gridTemplateColumns: "1fr" }} className="launch-grid">
-            {/* Left: form */}
-            <div style={{ padding: "2rem 2.5rem 2rem", borderRight: "1px solid var(--ink-10)" }} className="launch-form">
+        {/* Two-col form area */}
+        <div className="container-wide" style={{ paddingTop: 0, paddingBottom: "4rem" }}>
+          <div style={{
+            border: "1px solid rgba(255,255,255,0.07)",
+            borderTop: "none",
+            borderRadius: "0 0 8px 8px",
+            display: "grid", gridTemplateColumns: "1fr",
+            background: "rgba(255,255,255,0.015)",
+          }} className="launch-grid">
+
+            {/* Form */}
+            <div style={{ padding: "2.5rem clamp(1.25rem, 3vw, 3rem)" }} className="launch-form">
               {step === 1 && <Step1 draft={draft} setDraft={setDraft} onNext={() => setStep(2)} />}
               {step === 2 && <Step2 draft={draft} onBack={() => setStep(1)} onMint={handleMint} txStatus={txStatus} />}
               {step === 3 && launchResult && <Step3 result={launchResult} draft={draft} onReset={handleReset} />}
             </div>
 
-            {/* Right: manifest preview (hidden on step 3) */}
+            {/* Manifest preview */}
             {step !== 3 && (
-              <div style={{ padding: "2rem 2rem 2rem" }} className="launch-manifest">
+              <div style={{ padding: "2.5rem 2rem", borderLeft: "1px solid rgba(255,255,255,0.06)" }} className="launch-manifest">
+                <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.4375rem", letterSpacing: "0.16em", textTransform: "uppercase", color: "rgba(255,255,255,0.2)", display: "block", marginBottom: "0.75rem" }}>Live manifest preview</span>
                 <ManifestPreviewPanel manifest={manifest} valid={manifestValid} />
               </div>
             )}
           </div>
         </div>
       </main>
-
       <Footer />
 
       <style>{`
         @media (min-width: 1024px) {
-          .launch-grid { grid-template-columns: 1fr 340px !important; }
-          .launch-form { padding: 2.5rem 3rem !important; }
+          .launch-grid { grid-template-columns: 1fr 360px !important; }
+          .launch-form { padding: 3rem 3.5rem !important; }
         }
         @media (max-width: 1023px) {
-          .launch-manifest { border-top: 1px solid var(--ink-10); }
+          .launch-manifest { border-top: 1px solid rgba(255,255,255,0.06) !important; border-left: none !important; }
         }
         @media (max-width: 640px) {
-          .launch-form { padding: 1.25rem 1rem !important; }
+          .launch-form { padding: 1.5rem 1.25rem !important; }
         }
+
+        /* Override field-input for dark bg */
+        .launch-form .field-input,
+        .launch-form .field-textarea {
+          background: rgba(255,255,255,0.04) !important;
+          border-color: rgba(255,255,255,0.1) !important;
+          color: #fff !important;
+        }
+        .launch-form .field-input:focus,
+        .launch-form .field-textarea:focus {
+          border-color: rgba(30,111,255,0.5) !important;
+        }
+        .launch-form .field-input::placeholder,
+        .launch-form .field-textarea::placeholder {
+          color: rgba(255,255,255,0.2) !important;
+        }
+        .launch-form .field-label { color: rgba(255,255,255,0.3) !important; }
+        .launch-form .field-hint  { color: rgba(255,255,255,0.2) !important; }
       `}</style>
     </div>
   );
