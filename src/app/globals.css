@@ -1289,3 +1289,215 @@ nav {
   text-transform: uppercase;
   color: var(--ink-60);
 }
+
+/* ============================================================
+   LUMA — Ambient / Living Page Effects
+   ============================================================ */
+
+/* ------------------------------------------------------------
+   Shimmer — sweeping highlight across cards / frames
+   ------------------------------------------------------------ */
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+.shimmer {
+  background: linear-gradient(
+    105deg,
+    transparent 40%,
+    rgba(255,255,255,0.18) 50%,
+    transparent 60%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 3.2s ease-in-out infinite;
+}
+
+/* ------------------------------------------------------------
+   Glow pulse — soft halo that breathes
+   ------------------------------------------------------------ */
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(30,111,255,0); }
+  50%       { box-shadow: 0 0 32px 8px rgba(30,111,255,0.18); }
+}
+
+.glow-pulse {
+  animation: glow-pulse 3.5s ease-in-out infinite;
+}
+
+/* ------------------------------------------------------------
+   Ticker scan line — horizontal sweep on dark surfaces
+   ------------------------------------------------------------ */
+@keyframes scan-line {
+  0%   { top: -4px; opacity: 0.6; }
+  90%  { opacity: 0.4; }
+  100% { top: 100%; opacity: 0; }
+}
+
+.scan-line::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(30,111,255,0.5), transparent);
+  animation: scan-line 4s linear infinite;
+  pointer-events: none;
+}
+
+/* ------------------------------------------------------------
+   Floating particle dots — sprinkled on sections
+   ------------------------------------------------------------ */
+@keyframes particle-float {
+  0%        { transform: translateY(0) translateX(0) scale(1); opacity: 0; }
+  10%       { opacity: 1; }
+  90%       { opacity: 0.6; }
+  100%      { transform: translateY(-80px) translateX(20px) scale(0.6); opacity: 0; }
+}
+
+.particle {
+  position: absolute;
+  width: 4px; height: 4px;
+  border-radius: 50%;
+  background: var(--acid);
+  pointer-events: none;
+  animation: particle-float linear infinite;
+}
+
+/* Pre-placed particle variants (add to a relative container) */
+.particle-1  { left: 12%;  bottom: 10%; animation-duration: 6s;  animation-delay: 0s;    opacity: 0; }
+.particle-2  { left: 28%;  bottom: 5%;  animation-duration: 8s;  animation-delay: 1.2s;  opacity: 0; }
+.particle-3  { left: 55%;  bottom: 8%;  animation-duration: 7s;  animation-delay: 2.4s;  opacity: 0; }
+.particle-4  { left: 72%;  bottom: 12%; animation-duration: 9s;  animation-delay: 0.8s;  opacity: 0; }
+.particle-5  { left: 88%;  bottom: 6%;  animation-duration: 6.5s; animation-delay: 3s;   opacity: 0; }
+
+/* ------------------------------------------------------------
+   Gradient border — animated rainbow-ish accent border
+   ------------------------------------------------------------ */
+@keyframes border-spin {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.gradient-border {
+  position: relative;
+  isolation: isolate;
+}
+
+.gradient-border::before {
+  content: "";
+  position: absolute;
+  inset: -1.5px;
+  border-radius: inherit;
+  background: linear-gradient(270deg, #1E6FFF, #7B3FFF, #1E6FFF);
+  background-size: 300% 300%;
+  animation: border-spin 5s ease infinite;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.gradient-border:hover::before {
+  opacity: 1;
+}
+
+/* ------------------------------------------------------------
+   Text glint — one-time shimmer on text load
+   ------------------------------------------------------------ */
+@keyframes text-glint {
+  0%   { background-position: -200% center; }
+  60%  { background-position: 200% center; }
+  100% { background-position: 200% center; }
+}
+
+.text-glint {
+  background: linear-gradient(
+    105deg,
+    var(--ink) 40%,
+    rgba(100,160,255,0.9) 50%,
+    var(--ink) 60%
+  );
+  background-size: 250% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: text-glint 1.8s ease 0.4s both;
+}
+
+/* ------------------------------------------------------------
+   Noise grain overlay — adds premium texture to any surface
+   Usage: add class "grain" to a section or div
+   ------------------------------------------------------------ */
+.grain {
+  position: relative;
+  overflow: hidden;
+}
+
+.grain::after {
+  content: "";
+  position: absolute;
+  inset: -50%;
+  width: 200%; height: 200%;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23grain)' opacity='0.045'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 160px 160px;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.55;
+  mix-blend-mode: overlay;
+  animation: grain-shift 8s steps(2) infinite;
+}
+
+@keyframes grain-shift {
+  0%   { transform: translate(0, 0); }
+  25%  { transform: translate(-3%, 3%); }
+  50%  { transform: translate(2%, -2%); }
+  75%  { transform: translate(-1%, 4%); }
+  100% { transform: translate(0, 0); }
+}
+
+/* ------------------------------------------------------------
+   Marquee / ticker scroll
+   ------------------------------------------------------------ */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+.marquee-track {
+  display: flex;
+  overflow: hidden;
+  width: 100%;
+}
+
+.marquee-inner {
+  display: flex;
+  gap: 3rem;
+  white-space: nowrap;
+  animation: marquee 28s linear infinite;
+  will-change: transform;
+}
+
+.marquee-inner:hover {
+  animation-play-state: paused;
+}
+
+/* ------------------------------------------------------------
+   Reveal stagger helpers — wire up in JS with IntersectionObserver
+   ------------------------------------------------------------ */
+.stagger-child {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.7s var(--ease-out), transform 0.7s var(--ease-out);
+}
+
+.stagger-child.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.stagger-child:nth-child(1) { transition-delay: 0.05s; }
+.stagger-child:nth-child(2) { transition-delay: 0.12s; }
+.stagger-child:nth-child(3) { transition-delay: 0.19s; }
+.stagger-child:nth-child(4) { transition-delay: 0.26s; }
+.stagger-child:nth-child(5) { transition-delay: 0.33s; }
+.stagger-child:nth-child(6) { transition-delay: 0.40s; }

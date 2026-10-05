@@ -58,8 +58,17 @@ function ContractChip() {
   );
 }
 
-function LogoMark({ size = 30 }: { size?: number }) {
-  return <Image src="/LUMA LOGO-01.jpg" alt="LUMA logo" width={size} height={size} style={{ display: "block", flexShrink: 0, borderRadius: "4px" }} priority />;
+function LogoMark({ size = 34 }: { size?: number }) {
+  return (
+    <Image
+      src="/luma-logo-01.jpg"
+      alt="LUMA"
+      width={size}
+      height={size}
+      style={{ display: "block", flexShrink: 0, borderRadius: "6px" }}
+      priority
+    />
+  );
 }
 
 export default function Navbar() {
@@ -103,29 +112,23 @@ export default function Navbar() {
           height: "100%",
           display: "flex",
           alignItems: "center",
-          padding: "0 clamp(1rem, 4vw, 3.5rem)",
+          padding: "0 clamp(0.75rem, 3vw, 2rem)",
           maxWidth: "1440px",
           margin: "0 auto",
           width: "100%",
-          gap: "2.5rem",
+          gap: "2rem",
         }}>
 
-          {/* Logo — flush left, no auto-margin pushing it */}
-          <Link href="/" aria-label="LUMA home" style={{ display: "flex", alignItems: "center", gap: "0.5rem", textDecoration: "none", flexShrink: 0, marginRight: "0.5rem" }}>
-            <LogoMark size={32} />
-            <span style={{
-              fontFamily: "var(--font-logo)",
-              fontWeight: 700,
-              fontSize: "1.25rem",
-              letterSpacing: "-0.06em",
-              color: "var(--ink)",
-              lineHeight: 1,
-            }}>
-              LUMA
-            </span>
+          {/* Logo only — text removed, logo already contains LUMA wordmark */}
+          <Link
+            href="/"
+            aria-label="LUMA home"
+            style={{ display: "flex", alignItems: "center", textDecoration: "none", flexShrink: 0 }}
+          >
+            <LogoMark size={36} />
           </Link>
 
-          {/* Desktop nav links — left-aligned, no flex:1 centering */}
+          {/* Desktop nav links */}
           <div className="nav-links-desktop" style={{ display: "flex", alignItems: "center", gap: "0.125rem" }}>
             {NAV_LINKS.map((link) => {
               const active = isActive(link.href);
@@ -152,10 +155,10 @@ export default function Navbar() {
             })}
           </div>
 
-          {/* Spacer — pushes right section to far right */}
+          {/* Spacer */}
           <div style={{ flex: 1 }} />
 
-          {/* Desktop right — CA chip + CTA only, no wallet */}
+          {/* Desktop right */}
           <div className="nav-right-desktop" style={{ display: "flex", alignItems: "center", gap: "0.5rem", flexShrink: 0 }}>
             <ContractChip />
             <Link href="/markets" className="btn btn-nav">Open the app →</Link>
@@ -201,18 +204,8 @@ export default function Navbar() {
         }}
       >
         <div style={{ height: "var(--nav-h)", display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 1.25rem", borderBottom: "1px solid var(--ink-10)", flexShrink: 0 }}>
-          <Link href="/" onClick={() => setMenuOpen(false)} style={{ display: "flex", alignItems: "center", gap: "0.5rem", textDecoration: "none" }}>
-            <LogoMark size={28} />
-            <span style={{
-              fontFamily: "var(--font-logo)",
-              fontWeight: 700,
-              fontSize: "1.25rem",
-              letterSpacing: "-0.06em",
-              color: "var(--ink)",
-              lineHeight: 1,
-            }}>
-              LUMA
-            </span>
+          <Link href="/" onClick={() => setMenuOpen(false)} style={{ display: "flex", alignItems: "center", textDecoration: "none" }}>
+            <LogoMark size={32} />
           </Link>
           <button onClick={() => setMenuOpen(false)} aria-label="Close menu" style={{ background: "none", border: "none", cursor: "pointer", padding: "4px" }}>
             <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
@@ -242,7 +235,6 @@ export default function Navbar() {
         </nav>
 
         <div style={{ padding: "1.25rem", display: "flex", flexDirection: "column", gap: "0.625rem", borderTop: "1px solid var(--ink-06)" }}>
-          {/* Full CA on mobile */}
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0.625rem 0.875rem", background: "var(--ink-06)", borderRadius: "6px", border: "1px solid var(--ink-10)", gap: "0.5rem", overflow: "hidden" }}>
             <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.5rem", letterSpacing: "0.06em", color: "var(--ink-60)", flexShrink: 0 }}>CA</span>
             <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.475rem", letterSpacing: "0.03em", color: "var(--ink)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{CONTRACT_ADDRESS}</span>

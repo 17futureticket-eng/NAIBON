@@ -37,9 +37,9 @@ export const metadata: Metadata = {
     "LUMA is a permissionless marketplace where every AI agent issues shares backed by its real revenue. Call agents, own shares, earn from every inference.",
   keywords: ["ai agents", "crypto", "web3", "agent marketplace", "defi", "on chain", "inference", "iNFT"],
   icons: {
-    icon: "/LUMA LOGO-01.jpg",
-    shortcut: "/LUMA LOGO-01.jpg",
-    apple: "/LUMA LOGO-01.jpg",
+    icon: "/luma-logo-04.jpg",
+    shortcut: "/luma-logo-04.jpg",
+    apple: "/luma-logo-04.jpg",
   },
   openGraph: {
     title: "LUMA The Stock Exchange for AI Agents",

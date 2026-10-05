@@ -1,53 +1,9 @@
 ﻿"use client";
 
+import Image from "next/image";
 import AnimatedReveal from "@/components/primitives/AnimatedReveal";
 import SectionLabel from "@/components/primitives/SectionLabel";
 import Divider from "@/components/primitives/Divider";
-
-function StarfieldVisual() {
-  const stars = Array.from({ length: 80 }, (_, i) => ({
-    x: (i * 173 % 520),
-    y: (i * 97 % 380),
-    r: i % 5 === 0 ? 2 : i % 3 === 0 ? 1.5 : 0.75,
-    opacity: 0.4 + (i % 5) * 0.1,
-  }));
-  return (
-    <svg viewBox="0 0 520 380" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" className="w-full" style={{ maxWidth: "520px" }}>
-      <defs>
-        <radialGradient id="starGrad" cx="50%" cy="45%" r="50%">
-          <stop offset="0%" stopColor="#1A2840" />
-          <stop offset="100%" stopColor="#080C14" />
-        </radialGradient>
-      </defs>
-      <rect width="520" height="380" fill="url(#starGrad)" />
-      {/* Stars */}
-      {stars.map((s, i) => (
-        <circle key={i} cx={s.x} cy={s.y} r={s.r} fill="white" opacity={s.opacity} />
-      ))}
-      {/* Bright star / burst */}
-      <circle cx="190" cy="140" r="3" fill="white" />
-      {[0, 45, 90, 135, 180, 225, 270, 315].map((deg, i) => {
-        const rad = deg * Math.PI / 180;
-        const len = i % 2 === 0 ? 28 : 16;
-        return (
-          <line key={deg}
-            x1={190 + Math.cos(rad) * 4}
-            y1={140 + Math.sin(rad) * 4}
-            x2={190 + Math.cos(rad) * len}
-            y2={140 + Math.sin(rad) * len}
-            stroke="white" strokeWidth={i % 2 === 0 ? 1.5 : 0.75} opacity={i % 2 === 0 ? 0.9 : 0.5}
-          />
-        );
-      })}
-      {/* Pixel cloud at bottom */}
-      {Array.from({ length: 20 }).map((_, i) => (
-        <rect key={i} x={i * 26} y={300 + (i % 3) * 10 - 5} width={22} height={22 + (i % 4) * 6}
-          fill={`rgba(255,255,255,${0.05 + (i % 5) * 0.02})`} />
-      ))}
-      <text x="26" y="360" fontFamily="var(--font-mono)" fontSize="7" fill="rgba(255,255,255,0.3)" letterSpacing="1.5">VERIFIABLE BY DESIGN</text>
-    </svg>
-  );
-}
 
 const TRUST_POINTS = [
   {
@@ -79,10 +35,16 @@ export default function ProtocolTrust() {
       <div className="container-wide">
         <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: "clamp(3rem, 6vw, 5rem)", alignItems: "start" }} className="lg-two-col-t">
 
-          {/* Left: visual */}
+          {/* Left: LUMA LOGO-03 image */}
           <AnimatedReveal direction="left">
-            <div style={{ border: "1px solid var(--ink-10)", borderRadius: "4px", overflow: "hidden" }}>
-              <StarfieldVisual />
+            <div style={{ border: "1px solid var(--ink-10)", borderRadius: "12px", overflow: "hidden", boxShadow: "0 8px 40px rgba(10,18,50,0.10)" }}>
+              <Image
+                src="/luma-logo-03.jpg"
+                alt="LUMA — verifiable by design, attested by the TEE"
+                width={520}
+                height={380}
+                style={{ display: "block", width: "100%", height: "auto" }}
+              />
             </div>
             <div style={{ marginTop: "0.75rem", fontFamily: "var(--font-mono)", fontSize: "0.5625rem", letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--ink-30)" }}>
               verifiable by model · attested by the tee
