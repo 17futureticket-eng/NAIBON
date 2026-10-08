@@ -200,21 +200,24 @@ export default function Navbar() {
               aria-label="LUMA on X"
               style={{
                 display: "inline-flex", alignItems: "center", justifyContent: "center",
-                width: "32px", height: "32px", borderRadius: "6px",
-                color: dark ? "rgba(255,255,255,0.65)" : "var(--ink-60)",
-                transition: "color 0.2s ease, background 0.2s ease",
+                width: "36px", height: "36px", borderRadius: "8px",
+                background: dark ? "rgba(255,255,255,0.10)" : "rgba(10,14,26,0.08)",
+                color: dark ? "#fff" : "var(--ink)",
+                transition: "background 0.2s ease, transform 0.2s ease",
                 flexShrink: 0,
               }}
               onMouseEnter={e => {
-                (e.currentTarget as HTMLElement).style.color = dark ? "#fff" : "var(--ink)";
-                (e.currentTarget as HTMLElement).style.background = dark ? "rgba(255,255,255,0.08)" : "var(--ink-06)";
+                (e.currentTarget as HTMLElement).style.background = "#000";
+                (e.currentTarget as HTMLElement).style.color = "#fff";
+                (e.currentTarget as HTMLElement).style.transform = "scale(1.08)";
               }}
               onMouseLeave={e => {
-                (e.currentTarget as HTMLElement).style.color = dark ? "rgba(255,255,255,0.65)" : "var(--ink-60)";
-                (e.currentTarget as HTMLElement).style.background = "transparent";
+                (e.currentTarget as HTMLElement).style.background = dark ? "rgba(255,255,255,0.10)" : "rgba(10,14,26,0.08)";
+                (e.currentTarget as HTMLElement).style.color = dark ? "#fff" : "var(--ink)";
+                (e.currentTarget as HTMLElement).style.transform = "scale(1)";
               }}
             >
-              <svg width="15" height="15" viewBox="0 0 1200 1227" fill="currentColor" aria-hidden="true">
+              <svg width="18" height="18" viewBox="0 0 1200 1227" fill="currentColor" aria-hidden="true">
                 <path d="M714.163 519.284 1160.89 0h-105.86L667.137 450.887 357.328 0H0l468.492 681.821L0 1226.37h105.866l409.625-476.152 327.181 476.152H1200L714.137 519.284h.026ZM569.165 687.828l-47.468-67.894-377.686-540.24h162.604l304.797 435.991 47.468 67.894 396.2 566.721H892.476L569.165 687.854v-.026Z"/>
               </svg>
             </Link>
@@ -318,10 +321,19 @@ export default function Navbar() {
             href="https://x.com/luma_protocol"
             target="_blank"
             rel="noopener noreferrer"
-            style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", fontFamily: "var(--font-mono)", fontSize: "0.5625rem", letterSpacing: "0.1em", color: "var(--ink-60)", textDecoration: "none" }}
+            style={{
+              display: "inline-flex", alignItems: "center", gap: "0.625rem",
+              padding: "0.625rem 1rem", borderRadius: "8px",
+              background: "#000", color: "#fff",
+              textDecoration: "none", transition: "opacity 0.15s ease",
+              fontFamily: "var(--font-sans)", fontSize: "0.875rem", fontWeight: 600,
+              letterSpacing: "-0.01em",
+            }}
+            onMouseEnter={e => (e.currentTarget as HTMLElement).style.opacity = "0.85"}
+            onMouseLeave={e => (e.currentTarget as HTMLElement).style.opacity = "1"}
           >
-            <svg width="13" height="13" viewBox="0 0 14 14" fill="currentColor" aria-hidden="true">
-              <path d="M8.23 5.93 12.97 0h-1.12L7.72 5.16 4.38 0H.5l5 7.27L.5 14h1.12l4.37-5.46L9.62 14h3.88L8.23 5.93Zm-1.55 1.93-.5-.73L2.06.9h1.73l3.24 4.64.5.73 4.2 6.01h-1.73L6.68 7.86Z"/>
+            <svg width="16" height="16" viewBox="0 0 1200 1227" fill="currentColor" aria-hidden="true">
+              <path d="M714.163 519.284 1160.89 0h-105.86L667.137 450.887 357.328 0H0l468.492 681.821L0 1226.37h105.866l409.625-476.152 327.181 476.152H1200L714.137 519.284h.026ZM569.165 687.828l-47.468-67.894-377.686-540.24h162.604l304.797 435.991 47.468 67.894 396.2 566.721H892.476L569.165 687.854v-.026Z"/>
             </svg>
             @luma_protocol
           </Link>

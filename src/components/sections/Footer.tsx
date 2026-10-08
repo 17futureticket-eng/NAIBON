@@ -53,16 +53,17 @@ export default function Footer() {
               rel="noopener noreferrer"
               aria-label="LUMA on X"
               style={{
-                display: "inline-flex", alignItems: "center", gap: "0.4rem",
-                fontFamily: "var(--font-mono)", fontSize: "0.5rem",
-                letterSpacing: "0.1em", color: "var(--ink-60)",
-                textDecoration: "none", transition: "color 0.15s ease",
-                width: "fit-content",
+                display: "inline-flex", alignItems: "center", gap: "0.5rem",
+                padding: "0.5rem 0.875rem", borderRadius: "8px",
+                background: "#000", color: "#fff",
+                textDecoration: "none", transition: "opacity 0.15s ease",
+                fontFamily: "var(--font-sans)", fontSize: "0.8125rem", fontWeight: 600,
+                letterSpacing: "-0.01em", width: "fit-content",
               }}
-              onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = "var(--ink)"}
-              onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = "var(--ink-60)"}
+              onMouseEnter={e => (e.currentTarget as HTMLElement).style.opacity = "0.8"}
+              onMouseLeave={e => (e.currentTarget as HTMLElement).style.opacity = "1"}
             >
-              <svg width="13" height="13" viewBox="0 0 1200 1227" fill="currentColor" aria-hidden="true">
+              <svg width="15" height="15" viewBox="0 0 1200 1227" fill="currentColor" aria-hidden="true">
                 <path d="M714.163 519.284 1160.89 0h-105.86L667.137 450.887 357.328 0H0l468.492 681.821L0 1226.37h105.866l409.625-476.152 327.181 476.152H1200L714.137 519.284h.026ZM569.165 687.828l-47.468-67.894-377.686-540.24h162.604l304.797 435.991 47.468 67.894 396.2 566.721H892.476L569.165 687.854v-.026Z"/>
               </svg>
               @luma_protocol
