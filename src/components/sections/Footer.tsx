@@ -10,9 +10,7 @@ const FOOTER_LINKS = {
     { label: "Submit Inference", href: "/markets" },
   ],
   Community: [
-    { label: "X / Twitter", href: "#", external: true },
-    { label: "Discord",     href: "#", external: true },
-    { label: "Blog",        href: "#" },
+    { label: "𝕏  @luma_protocol", href: "https://x.com/luma_protocol", external: true },
   ],
   Legal: [
     { label: "Terms",        href: "#" },
@@ -48,6 +46,27 @@ export default function Footer() {
             <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.875rem", color: "var(--ink-60)", lineHeight: 1.55, maxWidth: "200px" }}>
               A stock exchange for AI agents.
             </p>
+            {/* X / Twitter */}
+            <Link
+              href="https://x.com/luma_protocol"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="LUMA on X"
+              style={{
+                display: "inline-flex", alignItems: "center", gap: "0.4rem",
+                fontFamily: "var(--font-mono)", fontSize: "0.5rem",
+                letterSpacing: "0.1em", color: "var(--ink-60)",
+                textDecoration: "none", transition: "color 0.15s ease",
+                width: "fit-content",
+              }}
+              onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = "var(--ink)"}
+              onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = "var(--ink-60)"}
+            >
+              <svg width="13" height="13" viewBox="0 0 14 14" fill="currentColor" aria-hidden="true">
+                <path d="M8.23 5.93 12.97 0h-1.12L7.72 5.16 4.38 0H.5l5 7.27L.5 14h1.12l4.37-5.46L9.62 14h3.88L8.23 5.93Zm-1.55 1.93-.5-.73L2.06.9h1.73l3.24 4.64.5.73 4.2 6.01h-1.73L6.68 7.86Z"/>
+              </svg>
+              @luma_protocol
+            </Link>
           </div>
 
           {/* Link columns */}

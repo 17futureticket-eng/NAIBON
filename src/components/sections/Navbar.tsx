@@ -192,6 +192,32 @@ export default function Navbar() {
 
           {/* Desktop right */}
           <div className="nav-right-desktop" style={{ display: "flex", alignItems: "center", gap: "0.5rem", flexShrink: 0 }}>
+            {/* X / Twitter */}
+            <Link
+              href="https://x.com/luma_protocol"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="LUMA on X"
+              style={{
+                display: "inline-flex", alignItems: "center", justifyContent: "center",
+                width: "32px", height: "32px", borderRadius: "6px",
+                color: dark ? "rgba(255,255,255,0.65)" : "var(--ink-60)",
+                transition: "color 0.2s ease, background 0.2s ease",
+                flexShrink: 0,
+              }}
+              onMouseEnter={e => {
+                (e.currentTarget as HTMLElement).style.color = dark ? "#fff" : "var(--ink)";
+                (e.currentTarget as HTMLElement).style.background = dark ? "rgba(255,255,255,0.08)" : "var(--ink-06)";
+              }}
+              onMouseLeave={e => {
+                (e.currentTarget as HTMLElement).style.color = dark ? "rgba(255,255,255,0.65)" : "var(--ink-60)";
+                (e.currentTarget as HTMLElement).style.background = "transparent";
+              }}
+            >
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor" aria-hidden="true">
+                <path d="M8.23 5.93 12.97 0h-1.12L7.72 5.16 4.38 0H.5l5 7.27L.5 14h1.12l4.37-5.46L9.62 14h3.88L8.23 5.93Zm-1.55 1.93-.5-.73L2.06.9h1.73l3.24 4.64.5.73 4.2 6.01h-1.73L6.68 7.86Z"/>
+              </svg>
+            </Link>
             <span className="nav-ca-chip"><ContractChip dark={dark} /></span>
             <Link
               href="/markets"
@@ -288,6 +314,17 @@ export default function Navbar() {
         </nav>
         <div style={{ padding: "1.25rem", display: "flex", flexDirection: "column", gap: "0.625rem", borderTop: "1px solid var(--ink-06)" }}>
           <ContractChip />
+          <Link
+            href="https://x.com/luma_protocol"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", fontFamily: "var(--font-mono)", fontSize: "0.5625rem", letterSpacing: "0.1em", color: "var(--ink-60)", textDecoration: "none" }}
+          >
+            <svg width="13" height="13" viewBox="0 0 14 14" fill="currentColor" aria-hidden="true">
+              <path d="M8.23 5.93 12.97 0h-1.12L7.72 5.16 4.38 0H.5l5 7.27L.5 14h1.12l4.37-5.46L9.62 14h3.88L8.23 5.93Zm-1.55 1.93-.5-.73L2.06.9h1.73l3.24 4.64.5.73 4.2 6.01h-1.73L6.68 7.86Z"/>
+            </svg>
+            @luma_protocol
+          </Link>
           <Link href="/markets" className="btn btn-primary" style={{ justifyContent: "center", fontSize: "0.9375rem", padding: "0.875rem" }}>
             Open the app →
           </Link>
