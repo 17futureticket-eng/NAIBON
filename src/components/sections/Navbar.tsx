@@ -214,8 +214,8 @@ export default function Navbar() {
                 (e.currentTarget as HTMLElement).style.background = "transparent";
               }}
             >
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor" aria-hidden="true">
-                <path d="M8.23 5.93 12.97 0h-1.12L7.72 5.16 4.38 0H.5l5 7.27L.5 14h1.12l4.37-5.46L9.62 14h3.88L8.23 5.93Zm-1.55 1.93-.5-.73L2.06.9h1.73l3.24 4.64.5.73 4.2 6.01h-1.73L6.68 7.86Z"/>
+              <svg width="15" height="15" viewBox="0 0 1200 1227" fill="currentColor" aria-hidden="true">
+                <path d="M714.163 519.284 1160.89 0h-105.86L667.137 450.887 357.328 0H0l468.492 681.821L0 1226.37h105.866l409.625-476.152 327.181 476.152H1200L714.137 519.284h.026ZM569.165 687.828l-47.468-67.894-377.686-540.24h162.604l304.797 435.991 47.468 67.894 396.2 566.721H892.476L569.165 687.854v-.026Z"/>
               </svg>
             </Link>
             <span className="nav-ca-chip"><ContractChip dark={dark} /></span>
