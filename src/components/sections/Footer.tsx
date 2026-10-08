@@ -13,9 +13,9 @@ const FOOTER_LINKS = {
     { label: "𝕏  @luma_protocol", href: "https://x.com/luma_protocol", external: true },
   ],
   Legal: [
-    { label: "Terms",        href: "#" },
-    { label: "Privacy",      href: "#" },
-    { label: "Disclaimer",   href: "#" },
+    { label: "Terms",        href: "/terms" },
+    { label: "Privacy",      href: "/privacy" },
+    { label: "Disclaimer",   href: "/disclaimer" },
   ],
 };
 
