@@ -9,12 +9,21 @@ const FOOTER_LINKS = {
     { label: "Launch Agent",     href: "/launch" },
     { label: "Submit Inference", href: "/markets" },
   ],
+  Community: [
+    { label: "X", href: "https://x.com/luma_protocol", external: true, isX: true },
+  ],
   Legal: [
-    { label: "Terms",        href: "/terms" },
-    { label: "Privacy",      href: "/privacy" },
-    { label: "Disclaimer",   href: "/disclaimer" },
+    { label: "Terms",      href: "/terms" },
+    { label: "Privacy",    href: "/privacy" },
+    { label: "Disclaimer", href: "/disclaimer" },
   ],
 };
+
+const XIcon = () => (
+  <svg width="15" height="15" viewBox="0 0 1200 1227" fill="currentColor" aria-hidden="true">
+    <path d="M714.163 519.284 1160.89 0h-105.86L667.137 450.887 357.328 0H0l468.492 681.821L0 1226.37h105.866l409.625-476.152 327.181 476.152H1200L714.137 519.284h.026ZM569.165 687.828l-47.468-67.894-377.686-540.24h162.604l304.797 435.991 47.468 67.894 396.2 566.721H892.476L569.165 687.854v-.026Z"/>
+  </svg>
+);
 
 export default function Footer() {
   const year = new Date().getFullYear();
@@ -26,7 +35,7 @@ export default function Footer() {
         {/* Top grid */}
         <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: "2rem 2rem" }} className="footer-grid">
 
-          {/* Brand */}
+          {/* Brand — no X icon here */}
           <div className="footer-brand" style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
             <Link href="/" style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", textDecoration: "none" }} aria-label="LUMA home">
               <Image
@@ -43,26 +52,6 @@ export default function Footer() {
             <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.875rem", color: "var(--ink-60)", lineHeight: 1.55, maxWidth: "200px" }}>
               A stock exchange for AI agents.
             </p>
-            {/* X / Twitter */}
-            <Link
-              href="https://x.com/luma_protocol"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="LUMA on X"
-              style={{
-                display: "inline-flex", alignItems: "center", justifyContent: "center",
-                width: "36px", height: "36px", borderRadius: "8px",
-                background: "#000", color: "#fff",
-                textDecoration: "none", transition: "opacity 0.15s ease",
-                width: "fit-content", padding: "0 0.625rem",
-              }}
-              onMouseEnter={e => (e.currentTarget as HTMLElement).style.opacity = "0.8"}
-              onMouseLeave={e => (e.currentTarget as HTMLElement).style.opacity = "1"}
-            >
-              <svg width="16" height="16" viewBox="0 0 1200 1227" fill="currentColor" aria-hidden="true">
-                <path d="M714.163 519.284 1160.89 0h-105.86L667.137 450.887 357.328 0H0l468.492 681.821L0 1226.37h105.866l409.625-476.152 327.181 476.152H1200L714.137 519.284h.026ZM569.165 687.828l-47.468-67.894-377.686-540.24h162.604l304.797 435.991 47.468 67.894 396.2 566.721H892.476L569.165 687.854v-.026Z"/>
-              </svg>
-            </Link>
           </div>
 
           {/* Link columns */}
@@ -74,16 +63,37 @@ export default function Footer() {
               <ul style={{ display: "flex", flexDirection: "column", gap: "0.5rem", listStyle: "none" }}>
                 {links.map((link) => (
                   <li key={link.label}>
-                    <Link
-                      href={link.href}
-                      target={"external" in link && link.external ? "_blank" : undefined}
-                      rel={"external" in link && link.external ? "noopener noreferrer" : undefined}
-                      style={{ fontFamily: "var(--font-sans)", fontSize: "0.875rem", color: "var(--ink-60)", textDecoration: "none", transition: "color 0.15s ease" }}
-                      onMouseEnter={(e) => ((e.target as HTMLElement).style.color = "var(--ink)")}
-                      onMouseLeave={(e) => ((e.target as HTMLElement).style.color = "var(--ink-60)")}
-                    >
-                      {link.label}
-                    </Link>
+                    {"isX" in link && link.isX ? (
+                      /* X icon button */
+                      <Link
+                        href={link.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label="LUMA on X"
+                        style={{
+                          display: "inline-flex", alignItems: "center", justifyContent: "center",
+                          width: "34px", height: "34px", borderRadius: "7px",
+                          background: "#000", color: "#fff",
+                          textDecoration: "none", transition: "opacity 0.15s ease",
+                        }}
+                        onMouseEnter={e => (e.currentTarget as HTMLElement).style.opacity = "0.75"}
+                        onMouseLeave={e => (e.currentTarget as HTMLElement).style.opacity = "1"}
+                      >
+                        <XIcon />
+                      </Link>
+                    ) : (
+                      /* Normal text link */
+                      <Link
+                        href={link.href}
+                        target={"external" in link && link.external ? "_blank" : undefined}
+                        rel={"external" in link && link.external ? "noopener noreferrer" : undefined}
+                        style={{ fontFamily: "var(--font-sans)", fontSize: "0.875rem", color: "var(--ink-60)", textDecoration: "none", transition: "color 0.15s ease" }}
+                        onMouseEnter={e => ((e.target as HTMLElement).style.color = "var(--ink)")}
+                        onMouseLeave={e => ((e.target as HTMLElement).style.color = "var(--ink-60)")}
+                      >
+                        {link.label}
+                      </Link>
+                    )}
                   </li>
                 ))}
               </ul>
