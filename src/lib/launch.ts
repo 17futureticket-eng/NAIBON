@@ -1,5 +1,5 @@
 /**
- * LUMA Launch Agent Data Layer
+ * LUMA Launch Agent Data Layer (EVM / ERC-20)
  *
  * Manages draft state, manifest computation, and the mint/deploy flow.
  * Replace mock functions with real wallet/contract calls when ready.
@@ -12,9 +12,9 @@ export type LaunchStep = 1 | 2 | 3;
 export type WalletTxStatus =
   | "idle"
   | "connecting"
-  | "confirm"      // waiting for user to confirm in wallet
-  | "pending"      // tx submitted, waiting for confirmation
-  | "confirmed"    // tx mined
+  | "confirm"    // waiting for user to confirm in wallet
+  | "pending"    // tx submitted, waiting for on-chain confirmation
+  | "confirmed"  // tx mined
   | "failed";
 
 export interface ToolCredential {
@@ -30,10 +30,10 @@ export interface AgentDraft {
   name: string;
   /** One-line description */
   description: string;
-  /** per call price */
+  /** Per-call price */
   pricePerCall: string;
   /** Currency */
-  currency: "USDC" | "SOL";
+  currency: "USDC" | "ETH";
   /** Runtime */
   runtime: Runtime;
   /** System prompt */
@@ -87,11 +87,7 @@ const DRAFT_KEY = "luma:launch:draft";
 
 export function saveDraft(draft: AgentDraft): void {
   if (typeof window === "undefined") return;
-  try {
-    localStorage.setItem(DRAFT_KEY, JSON.stringify(draft));
-  } catch {
-    // storage may be unavailable
-  }
+  try { localStorage.setItem(DRAFT_KEY, JSON.stringify(draft)); } catch { /* storage unavailable */ }
 }
 
 export function loadDraft(): AgentDraft | null {
@@ -100,9 +96,7 @@ export function loadDraft(): AgentDraft | null {
     const raw = localStorage.getItem(DRAFT_KEY);
     if (!raw) return null;
     return JSON.parse(raw) as AgentDraft;
-  } catch {
-    return null;
-  }
+  } catch { return null; }
 }
 
 export function clearDraft(): void {
@@ -115,47 +109,41 @@ export function clearDraft(): void {
    ───────────────────────────────────────────── */
 
 const RUNTIME_BACKEND: Record<Runtime, string> = {
-  hermes: "Solana · intel TDX",
-  raw: "custom compute",
+  hermes: "EVM · Intel TDX",
+  raw:    "custom compute",
   custom: "custom compute",
 };
 
-/**
- * Build the live manifest preview from draft state.
- * The manifest hash is not real until mint show "at mint time" placeholder.
- */
 export function buildManifest(draft: AgentDraft): ManifestPreview {
   const ens = draft.ticker
-    ? `${draft.ticker.toLowerCase()}.luma.sol`
+    ? `${draft.ticker.toLowerCase()}.luma.eth`
     : " ";
 
   const priceDisplay = draft.pricePerCall
     ? `$${parseFloat(draft.pricePerCall || "0").toFixed(2)} ${draft.currency} / call`
     : " ";
 
-  const secretsDisplay =
-    draft.credentials.length > 0
-      ? `${draft.credentials.length} key(s) → 1Claw`
-      : "0 key(s) → 1Claw";
+  const secretsDisplay = draft.credentials.length > 0
+    ? `${draft.credentials.length} key(s) → 1Claw`
+    : "0 key(s) → 1Claw";
 
-  const tools =
-    draft.runtime === "hermes"
-      ? ["recall", "note", "query_agent", ...draft.credentials.map((c) => c.name.toLowerCase())]
-      : ["query_agent"];
+  const tools = draft.runtime === "hermes"
+    ? ["recall", "note", "query_agent", ...draft.credentials.map((c) => c.name.toLowerCase())]
+    : ["query_agent"];
 
   const skills = draft.skills.map((s) => s.name);
 
   return {
-    ticker: draft.ticker ? `${draft.ticker.toUpperCase()}.luma.sol` : " ",
-    price: priceDisplay,
-    runtime: draft.runtime,
-    backend: RUNTIME_BACKEND[draft.runtime],
-    secrets: secretsDisplay,
+    ticker:       draft.ticker ? `${draft.ticker.toUpperCase()}.luma.eth` : " ",
+    price:        priceDisplay,
+    runtime:      draft.runtime,
+    backend:      RUNTIME_BACKEND[draft.runtime],
+    secrets:      secretsDisplay,
     tools,
     skills,
     manifestHash: "[at mint time]",
-    inftTokenId: "[at mint time]",
-    ensRecord: draft.ticker ? "reserved" : " ",
+    inftTokenId:  "[at mint time]",
+    ensRecord:    draft.ticker ? "reserved" : " ",
   };
 }
 
@@ -166,39 +154,37 @@ export function buildManifest(draft: AgentDraft): ManifestPreview {
 export interface TickerCheck {
   available: boolean;
   message: string;
-  chainId?: number;
 }
 
 /**
  * Check if a ticker is available on chain.
- * TODO: replace with SNS / domain resolution + registry lookup.
+ * TODO: replace with ENS subdomain resolution + ERC-20 registry lookup.
  */
 export async function checkTicker(ticker: string): Promise<TickerCheck> {
   if (!ticker || ticker.length < 2) {
     return { available: false, message: "" };
   }
   if (!/^[A-Z0-9]{2,8}$/.test(ticker.toUpperCase())) {
-    return { available: false, message: "ticker must be 2 8 alphanumeric chars" };
+    return { available: false, message: "Ticker must be 2–8 alphanumeric chars" };
   }
 
-  // Mock: simulate a short network delay
+  // Simulate network delay
   await new Promise((r) => setTimeout(r, 400));
 
-  // Mock: pretend AUDIT is taken, everything else is available
+  // Mock: AUDIT is taken, everything else available
   if (ticker.toUpperCase() === "AUDIT") {
-    return { available: false, message: "ticker already registered" };
+    return { available: false, message: "Ticker already registered" };
   }
 
   return {
     available: true,
-    message: `✓ available · resolves to Solana mainnet-beta`,
-    chainId: 16602,
+    message: `✓ available · resolves to Base mainnet`,
   };
 }
 
 /* ─────────────────────────────────────────────
    Mint simulation
-   TODO: replace with wallet-adapter / web3.js contract call
+   TODO: replace with wagmi / ethers.js contract call
    ───────────────────────────────────────────── */
 
 export async function mintAgent(
@@ -213,17 +199,15 @@ export async function mintAgent(
 
   onStatus("confirmed");
 
-  const result: LaunchResult = {
-    ticker: draft.ticker.toUpperCase(),
-    ens: `${draft.ticker.toLowerCase()}.luma.sol`,
-    inftTokenId: `0x${Math.random().toString(16).slice(2, 10).toUpperCase()}...${Math.random().toString(16).slice(2, 6).toUpperCase()}`,
+  return {
+    ticker:          draft.ticker.toUpperCase(),
+    ens:             `${draft.ticker.toLowerCase()}.luma.eth`,
+    inftTokenId:     `0x${Math.random().toString(16).slice(2, 10).toUpperCase()}...${Math.random().toString(16).slice(2, 6).toUpperCase()}`,
     contractAddress: `0x${Math.random().toString(16).slice(2, 10).toUpperCase()}...${Math.random().toString(16).slice(2, 6)}`,
-    txHash: `0x${Math.random().toString(16).slice(2, 12)}...${Math.random().toString(16).slice(2, 8)}`,
-    network: "Solana mainnet-beta",
-    sharePrice: `$${parseFloat(draft.pricePerCall).toFixed(2)} USDC`,
+    txHash:          `0x${Math.random().toString(16).slice(2, 12)}...${Math.random().toString(16).slice(2, 8)}`,
+    network:         "Base mainnet",
+    sharePrice:      `$${parseFloat(draft.pricePerCall).toFixed(2)} USDC`,
   };
-
-  return result;
 }
 
 /* ─────────────────────────────────────────────
@@ -242,16 +226,16 @@ export interface Template {
 export const TEMPLATES: Template[] = [
   {
     id: "brief",
-    label: "brief research-dd",
+    label: "brief — research & DD",
     ticker: "BRIEF",
-    description: "Deep research and due-diligence agent for on chain projects.",
+    description: "Deep research and due-diligence agent for on-chain projects.",
     systemPrompt:
-      "You are a research and due-diligence agent. When given a token address or project name, you gather on chain metrics, team history, tokenomics, and produce a structured DD report.",
+      "You are a research and due-diligence agent. When given a token address or project name, gather on-chain metrics, team history, tokenomics, and produce a structured DD report.",
     credentials: [],
   },
   {
     id: "yield",
-    label: "yield defi-yield-scout",
+    label: "yield — DeFi scout",
     ticker: "YIELD",
     description: "Monitors DeFi protocol yields and identifies optimal liquidity positions.",
     systemPrompt:

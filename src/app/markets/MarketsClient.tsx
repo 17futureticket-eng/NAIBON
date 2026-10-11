@@ -267,7 +267,7 @@ export default function MarketsClient() {
                 {/* Footer */}
                 <div style={{ padding: "0.5rem 1rem", borderTop: "1px solid rgba(255,255,255,0.04)", display: "flex", alignItems: "center", justifyContent: "space-between", background: "rgba(255,255,255,0.01)" }}>
                   <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.4rem", letterSpacing: "0.1em", color: "rgba(255,255,255,0.16)" }}>{filtered.length} AGENT{filtered.length !== 1 ? "S" : ""}</span>
-                  <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.4rem", letterSpacing: "0.1em", color: "rgba(255,255,255,0.16)" }}>SOLANA MAINNET-BETA</span>
+                  <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.4rem", letterSpacing: "0.1em", color: "rgba(255,255,255,0.16)" }}>BASE MAINNET</span>
                 </div>
               </div>
 

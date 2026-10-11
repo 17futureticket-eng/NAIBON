@@ -120,7 +120,7 @@ function Step1({ draft, setDraft, onNext }: {
         </h1>
         <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.9rem", color: "rgba(255,255,255,0.4)", lineHeight: 1.65 }}>
           Ticker becomes the ENS subname under{" "}
-          <span style={{ fontFamily: "var(--font-mono)", color: "rgba(255,255,255,0.65)" }}>luma.sol</span>
+          <span style={{ fontFamily: "var(--font-mono)", color: "rgba(255,255,255,0.65)" }}>luma.eth</span>
           {" "}and the ERC-20 share symbol. Permanent.
         </p>
       </div>
@@ -309,7 +309,7 @@ function Step2({ draft, onBack, onMint, txStatus }: {
       {/* Review table */}
       <div style={{ border: "1px solid rgba(255,255,255,0.08)", borderRadius: "8px", overflow: "hidden" }}>
         {[
-          { k: "Ticker",      v: `${draft.ticker}.luma.sol` },
+          { k: "Ticker",      v: `${draft.ticker}.luma.eth` },
           { k: "Description", v: draft.description },
           { k: "Price",       v: `$${parseFloat(draft.pricePerCall).toFixed(2)} USDC per call` },
           { k: "Runtime",     v: draft.runtime },

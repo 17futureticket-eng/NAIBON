@@ -1,8 +1,8 @@
 /**
- * LUMA — Agent Data Layer (Solana)
+ * LUMA — Agent Data Layer (EVM / ERC-20)
  *
  * Single source of truth for all agent data.
- * Replace mock functions with real Solana program / API calls when backend is ready.
+ * Replace mock functions with real EVM contract / API calls when backend is ready.
  * Never scatter mock data through components — keep it here.
  */
 
@@ -21,11 +21,11 @@ export interface AgentSkill {
 }
 
 export interface Agent {
-  /** On chain ticker — max 8 chars, uppercase */
+  /** On-chain ticker — max 8 chars, uppercase */
   ticker: string;
   /** Display name */
   name: string;
-  /** Agent subdomain e.g. whale.luma.sol */
+  /** Agent ENS subdomain e.g. whale.luma.eth */
   domain: string;
   /** One-line description */
   description: string;
@@ -34,7 +34,7 @@ export interface Agent {
   /** Per inference price in USDC */
   pricePerCall: number;
   /** Currency */
-  currency: "USDC" | "SOL";
+  currency: "USDC" | "ETH";
   /** Cumulative revenue USD */
   cumulativeRevenue: number;
   /** Revenue per call 7d avg */
@@ -43,11 +43,11 @@ export interface Agent {
   calls24h: number;
   /** Total calls all time */
   callsTotal: number;
-  /** On chain vault balance USDC */
+  /** On-chain vault balance USDC */
   vaultBalance: number;
   /** IPO share price USDC */
   ipoSharePrice: number;
-  /** Total shares issued */
+  /** Total ERC-20 shares issued */
   totalShares: number;
   /** Shares still available at IPO */
   sharesAvailable: number;
@@ -59,7 +59,7 @@ export interface Agent {
   systemPromptExcerpt: string;
   /** iNFT token address — null until minted */
   inftTokenId: string | null;
-  /** Program / account address — null until deployed */
+  /** ERC-20 contract address — null until deployed */
   contractAddress: string | null;
   /** Recent inferences */
   recentCalls: RecentCall[];
@@ -97,15 +97,15 @@ export interface MarketMetrics {
 }
 
 /* ─────────────────────────────────────────────────────────
-   Mock data — replace with Solana program reads + indexer
+   Mock data — replace with EVM contract reads + indexer
    ───────────────────────────────────────────────────────── */
 
 export const MOCK_AGENTS: Agent[] = [
   {
     ticker: "WHALE",
     name: "Whale Watcher",
-    domain: "whale.luma.sol",
-    description: "Tracks large wallet movements and on chain whale activity across Solana and EVM chains.",
+    domain: "whale.luma.eth",
+    description: "Tracks large wallet movements and on-chain whale activity across EVM chains.",
     runtime: "hermes",
     pricePerCall: 0.10,
     currency: "USDC",
@@ -120,27 +120,27 @@ export const MOCK_AGENTS: Agent[] = [
     status: "active",
     isNew: true,
     systemPromptExcerpt: "You are a blockchain intelligence agent specialising in whale wallet tracking...",
-    inftTokenId: "7vHkXm...9pQr",
-    contractAddress: "3NaiBn...Xk4d",
+    inftTokenId: "0x7vHk...9pQr",
+    contractAddress: "0x3NaB...Xk4d",
     tools: ["recall", "note", "query_agent"],
-    skills: [{ name: "solana-query", description: "Query Solana state" }],
-    credentials: [{ name: "HELIUS_KEY", description: "Helius RPC API key" }],
+    skills: [{ name: "evm-query", description: "Query EVM chain state" }],
+    credentials: [{ name: "ALCHEMY_KEY", description: "Alchemy RPC API key" }],
     recentCalls: [
-      { txHash: "5xKm3n...Rp2q", caller: "8B3fWm...12aX", timestamp: "2m ago", fee: 0.10, status: "confirmed" },
-      { txHash: "9pLq4r...Sv5t", caller: "9C4eXn...34bY", timestamp: "5m ago", fee: 0.10, status: "confirmed" },
-      { txHash: "2mNk7s...Tw8u", caller: "1A2bYo...56cZ", timestamp: "11m ago", fee: 0.10, status: "confirmed" },
+      { txHash: "0x5xKm...Rp2q", caller: "0x8B3f...12aX", timestamp: "2m ago", fee: 0.10, status: "confirmed" },
+      { txHash: "0x9pLq...Sv5t", caller: "0x9C4e...34bY", timestamp: "5m ago", fee: 0.10, status: "confirmed" },
+      { txHash: "0x2mNk...Tw8u", caller: "0x1A2b...56cZ", timestamp: "11m ago", fee: 0.10, status: "confirmed" },
     ],
     topHolders: [
-      { address: "8B3fWm...12aX", shares: 120_000, pct: 12.0 },
-      { address: "2E1cXn...9f4Y", shares: 80_000,  pct: 8.0 },
-      { address: "4F5dYo...7b3Z", shares: 60_000,  pct: 6.0 },
+      { address: "0x8B3f...12aX", shares: 120_000, pct: 12.0 },
+      { address: "0x2E1c...9f4Y", shares: 80_000,  pct: 8.0 },
+      { address: "0x4F5d...7b3Z", shares: 60_000,  pct: 6.0 },
     ],
   },
   {
     ticker: "AUDIT",
     name: "Solidity Auditor",
-    domain: "audit.luma.sol",
-    description: "Audits Solidity and Anchor smart contracts for vulnerabilities, reentrancy, and gas optimisation.",
+    domain: "audit.luma.eth",
+    description: "Audits Solidity smart contracts for vulnerabilities, reentrancy, and gas optimisation.",
     runtime: "hermes",
     pricePerCall: 0.25,
     currency: "USDC",
@@ -154,26 +154,26 @@ export const MOCK_AGENTS: Agent[] = [
     sharesAvailable: 150_000,
     status: "active",
     isNew: false,
-    systemPromptExcerpt: "You are a senior smart contract security auditor. Analyse code for vulnerabilities...",
-    inftTokenId: "4KpQr8...mN2s",
-    contractAddress: "6AuDiT...Vz9w",
+    systemPromptExcerpt: "You are a senior smart contract security auditor. Analyse Solidity code for vulnerabilities...",
+    inftTokenId: "0x4KpQ...mN2s",
+    contractAddress: "0x6AuD...Vz9w",
     tools: ["recall", "code_analysis", "note"],
-    skills: [{ name: "anchor-audit", description: "Full Anchor program audit" }],
+    skills: [{ name: "solidity-audit", description: "Full Solidity contract audit" }],
     credentials: [],
     recentCalls: [
-      { txHash: "3rSt5u...Vw6x", caller: "C5DeYp...89eA", timestamp: "8m ago", fee: 0.25, status: "confirmed" },
-      { txHash: "7vWx9y...Za0b", caller: "D6EfZq...90fB", timestamp: "22m ago", fee: 0.25, status: "confirmed" },
+      { txHash: "0x3rSt...Vw6x", caller: "0xC5De...89eA", timestamp: "8m ago",  fee: 0.25, status: "confirmed" },
+      { txHash: "0x7vWx...Za0b", caller: "0xD6Ef...90fB", timestamp: "22m ago", fee: 0.25, status: "confirmed" },
     ],
     topHolders: [
-      { address: "C5DeYp...89eA", shares: 200_000, pct: 20.0 },
-      { address: "A3BcZr...45dC", shares: 110_000, pct: 11.0 },
+      { address: "0xC5De...89eA", shares: 200_000, pct: 20.0 },
+      { address: "0xA3Bc...45dC", shares: 110_000, pct: 11.0 },
     ],
   },
   {
     ticker: "SCOUT",
     name: "DeFi Scout",
-    domain: "scout.luma.sol",
-    description: "Monitors DeFi protocol yields, liquidity shifts, and rug risk signals across Solana in real time.",
+    domain: "scout.luma.eth",
+    description: "Monitors DeFi protocol yields, liquidity shifts, and rug risk signals across EVM chains.",
     runtime: "raw",
     pricePerCall: 0.05,
     currency: "USDC",
@@ -188,25 +188,25 @@ export const MOCK_AGENTS: Agent[] = [
     status: "active",
     isNew: false,
     systemPromptExcerpt: "You are a DeFi intelligence scout. Monitor protocols for yield opportunities...",
-    inftTokenId: "9sCoUt...Qr7n",
-    contractAddress: "5ScOuT...Nm3p",
+    inftTokenId: "0x9sCo...Qr7n",
+    contractAddress: "0x5ScO...Nm3p",
     tools: ["recall", "query_agent"],
     skills: [],
     credentials: [{ name: "DEFILLAMA_KEY", description: "DefiLlama API key" }],
     recentCalls: [
-      { txHash: "1aGh3i...Jk4l", caller: "E7FgAs...12hD", timestamp: "1m ago", fee: 0.05, status: "confirmed" },
-      { txHash: "5eIj7k...Mn8o", caller: "F8GhBt...23iE", timestamp: "3m ago", fee: 0.05, status: "confirmed" },
-      { txHash: "9mKl1n...Op2q", caller: "G9HiCu...34jF", timestamp: "7m ago", fee: 0.05, status: "confirmed" },
+      { txHash: "0x1aGh...Jk4l", caller: "0xE7Fg...12hD", timestamp: "1m ago", fee: 0.05, status: "confirmed" },
+      { txHash: "0x5eIj...Mn8o", caller: "0xF8Gh...23iE", timestamp: "3m ago", fee: 0.05, status: "confirmed" },
+      { txHash: "0x9mKl...Op2q", caller: "0xG9Hi...34jF", timestamp: "7m ago", fee: 0.05, status: "confirmed" },
     ],
     topHolders: [
-      { address: "E7FgAs...12hD", shares: 300_000, pct: 30.0 },
+      { address: "0xE7Fg...12hD", shares: 300_000, pct: 30.0 },
     ],
   },
   {
     ticker: "ORACLE",
     name: "Price Oracle",
-    domain: "oracle.luma.sol",
-    description: "Provides signed, TEE attested spot prices for any SPL token across major Solana DEXes.",
+    domain: "oracle.luma.eth",
+    description: "Provides signed, TEE-attested spot prices for any ERC-20 token across major EVM DEXes.",
     runtime: "raw",
     pricePerCall: 0.25,
     currency: "USDC",
@@ -220,7 +220,7 @@ export const MOCK_AGENTS: Agent[] = [
     sharesAvailable: 1_000_000,
     status: "ipo-open",
     isNew: true,
-    systemPromptExcerpt: "You are a price oracle agent. Return TEE attested spot prices for any SPL token...",
+    systemPromptExcerpt: "You are a price oracle agent. Return TEE-attested spot prices for any ERC-20 token...",
     inftTokenId: null,
     contractAddress: null,
     tools: ["query_agent"],
@@ -245,22 +245,22 @@ export const MOCK_METRICS: MarketMetrics = {
    ───────────────────────────────────────────── */
 
 export async function getAgents(filter: Filter = "all"): Promise<Agent[]> {
-  // TODO: replace with Solana program call / indexer query
+  // TODO: replace with EVM contract call / indexer query
   await new Promise((r) => setTimeout(r, 0));
-  if (filter === "all") return MOCK_AGENTS;
-  if (filter === "hermes") return MOCK_AGENTS.filter((a) => a.runtime === "hermes");
-  if (filter === "raw") return MOCK_AGENTS.filter((a) => a.runtime === "raw");
-  if (filter === "ipo-open") return MOCK_AGENTS.filter((a) => a.status === "ipo-open");
+  if (filter === "all")       return MOCK_AGENTS;
+  if (filter === "hermes")    return MOCK_AGENTS.filter((a) => a.runtime === "hermes");
+  if (filter === "raw")       return MOCK_AGENTS.filter((a) => a.runtime === "raw");
+  if (filter === "ipo-open")  return MOCK_AGENTS.filter((a) => a.status === "ipo-open");
   return MOCK_AGENTS;
 }
 
 export async function getAgent(ticker: string): Promise<Agent | null> {
-  // TODO: replace with Solana account lookup
+  // TODO: replace with EVM contract lookup
   return MOCK_AGENTS.find((a) => a.ticker.toLowerCase() === ticker.toLowerCase()) ?? null;
 }
 
 export async function getMarketMetrics(): Promise<MarketMetrics> {
-  // TODO: replace with on chain reads
+  // TODO: replace with on-chain reads
   return MOCK_METRICS;
 }
 
@@ -280,10 +280,10 @@ export function fmtNum(val: number): string {
   return `${(val / 1_000_000).toFixed(2)}m`;
 }
 
-/** Shorten a Solana address */
+/** Shorten an EVM address */
 export function shortAddr(addr: string): string {
   if (addr.length < 12) return addr;
-  return `${addr.slice(0, 4)}...${addr.slice(-4)}`;
+  return `${addr.slice(0, 6)}...${addr.slice(-4)}`;
 }
 
 export const RUNTIME_LABELS: Record<Runtime, string> = {
