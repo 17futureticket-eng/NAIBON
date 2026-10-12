@@ -124,8 +124,8 @@ export function buildManifest(draft: AgentDraft): ManifestPreview {
     : " ";
 
   const secretsDisplay = draft.credentials.length > 0
-    ? `${draft.credentials.length} key(s) → 1Claw`
-    : "0 key(s) → 1Claw";
+    ? `${draft.credentials.length} key(s) → secure HSM`
+    : "0 key(s) → secure HSM";
 
   const tools = draft.runtime === "hermes"
     ? ["recall", "note", "query_agent", ...draft.credentials.map((c) => c.name.toLowerCase())]

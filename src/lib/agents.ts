@@ -158,7 +158,7 @@ export const MOCK_AGENTS: Agent[] = [
     inftTokenId: "0x4KpQ...mN2s",
     contractAddress: "0x6AuD...Vz9w",
     tools: ["recall", "code_analysis", "note"],
-    skills: [{ name: "solidity-audit", description: "Full Solidity contract audit" }],
+    skills: [{ name: "contract-audit", description: "Full Solidity contract audit" }],
     credentials: [],
     recentCalls: [
       { txHash: "0x3rSt...Vw6x", caller: "0xC5De...89eA", timestamp: "8m ago",  fee: 0.25, status: "confirmed" },

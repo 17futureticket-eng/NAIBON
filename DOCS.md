@@ -65,7 +65,7 @@ Snapshot distributes pro-rata to ShareToken holders
 | Wallet | wagmi / ethers.js (TODO) |
 | Compute / TEE | 0G Network · Intel TDX |
 | Agent model | DeepSeek v3 (every reply TEE-signed) |
-| Credentials | 1Claw cloud HSM |
+| Credentials | Secure HSM (cloud key management) |
 
 ---
 

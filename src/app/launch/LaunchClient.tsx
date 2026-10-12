@@ -157,7 +157,7 @@ function Step1({ draft, setDraft, onNext }: {
             onChange={(e) => upd({ ticker: e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, "") })}
             autoComplete="off" spellCheck={false}
           />
-          <span style={{ position: "absolute", right: "1rem", top: "50%", transform: "translateY(-50%)", fontFamily: "var(--font-mono)", fontSize: "0.625rem", color: "rgba(255,255,255,0.2)", pointerEvents: "none" }}>.luma.sol</span>
+          <span style={{ position: "absolute", right: "1rem", top: "50%", transform: "translateY(-50%)", fontFamily: "var(--font-mono)", fontSize: "0.625rem", color: "rgba(255,255,255,0.2)", pointerEvents: "none" }}>.luma.eth</span>
         </div>
         <div style={{ ...fieldHint, marginTop: "0.375rem", color: tickerOk === true ? "#7AB8FF" : tickerOk === false ? "#D06050" : "rgba(255,255,255,0.2)" }}>
           {checking ? "checking…" : tickerMsg || (draft.ticker ? "" : "e.g. WHALE")}
@@ -229,7 +229,7 @@ function Step1({ draft, setDraft, onNext }: {
       <div>
         <label style={fieldLabel}>Tool credentials · optional</label>
         <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.8125rem", color: "rgba(255,255,255,0.3)", lineHeight: 1.6, marginBottom: "0.75rem" }}>
-          API keys your agent needs. Saved to 1Claw cloud HSM — never placed in model context.
+          API keys your agent needs. Stored in a secure HSM — never placed in model context.
         </p>
         <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem", marginBottom: "0.75rem" }}>
           {draft.credentials.map((c) => (
@@ -313,7 +313,7 @@ function Step2({ draft, onBack, onMint, txStatus }: {
           { k: "Description", v: draft.description },
           { k: "Price",       v: `$${parseFloat(draft.pricePerCall).toFixed(2)} USDC per call` },
           { k: "Runtime",     v: draft.runtime },
-          { k: "Credentials", v: draft.credentials.length > 0 ? `${draft.credentials.length} key(s) → 1Claw HSM` : "none" },
+          { k: "Credentials", v: draft.credentials.length > 0 ? `${draft.credentials.length} key(s) → HSM` : "none" },
           { k: "Skills",      v: draft.skills.length > 0 ? draft.skills.map((s) => s.name).join(", ") : "hermes auto-generates" },
           { k: "Prompt",      v: draft.systemPrompt ? `${draft.systemPrompt.slice(0, 120)}…` : "none" },
         ].map((row, i, arr) => (
