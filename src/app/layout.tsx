@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Playfair_Display, JetBrains_Mono, Space_Grotesk, Fraunces } from "next/font/google";
 import "./globals.css";
+import HorseGallopProvider from "@/components/HorseGallopProvider";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -75,6 +76,7 @@ export default function RootLayout({
       className={`${inter.variable} ${playfair.variable} ${jetbrains.variable} ${spaceGrotesk.variable} ${fraunces.variable}`}
     >
       <body>
+        <HorseGallopProvider />
         {children}
       </body>
     </html>
