@@ -4,6 +4,7 @@ import Image from "next/image";
 import AnimatedReveal from "@/components/primitives/AnimatedReveal";
 import SectionLabel from "@/components/primitives/SectionLabel";
 import Divider from "@/components/primitives/Divider";
+import TiltCard from "@/components/primitives/TiltCard";
 
 export default function Problem() {
   return (
@@ -18,7 +19,7 @@ export default function Problem() {
 
           {/* Left: real image (image1.png) */}
           <AnimatedReveal direction="left">
-            <div style={{ borderRadius: "8px", overflow: "hidden", boxShadow: "0 8px 40px rgba(10,18,50,0.12), 0 2px 8px rgba(0,0,0,0.07)", position: "relative", aspectRatio: "4/3", width: "100%", maxWidth: "100%" }}>
+            <TiltCard style={{ aspectRatio: "4/3", width: "100%", maxWidth: "100%" }}>
               <Image
                 src="/image1.png"
                 alt="Token price disconnected from agent usage the core problem LUMA solves"
@@ -26,13 +27,12 @@ export default function Problem() {
                 style={{ objectFit: "cover", objectPosition: "center" }}
                 sizes="(max-width: 1024px) 100vw, 50vw"
               />
-              {/* Overlay label */}
-              <div style={{ position: "absolute", bottom: "1rem", left: "1rem" }}>
+              <div style={{ position: "absolute", bottom: "1rem", left: "1rem", zIndex: 20 }}>
                 <span style={{ display: "inline-block", fontFamily: "var(--font-mono)", fontSize: "0.5625rem", letterSpacing: "0.12em", textTransform: "uppercase", color: "rgba(255,255,255,0.7)", background: "rgba(0,0,0,0.45)", backdropFilter: "blur(6px)", padding: "0.3rem 0.625rem", borderRadius: "3px" }}>
                   Fig. 01 Token price vs agent usage
                 </span>
               </div>
-            </div>
+            </TiltCard>
           </AnimatedReveal>
 
           {/* Right: editorial text */}

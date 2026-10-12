@@ -4,6 +4,7 @@ import Image from "next/image";
 import AnimatedReveal from "@/components/primitives/AnimatedReveal";
 import SectionLabel from "@/components/primitives/SectionLabel";
 import Divider from "@/components/primitives/Divider";
+import TiltCard from "@/components/primitives/TiltCard";
 
 const TRUST_POINTS = [
   {
@@ -37,7 +38,7 @@ export default function ProtocolTrust() {
 
           {/* Left: LUMA LOGO-03 image */}
           <AnimatedReveal direction="left">
-            <div style={{ border: "1px solid var(--ink-10)", borderRadius: "12px", overflow: "hidden", boxShadow: "0 8px 40px rgba(10,18,50,0.10)" }}>
+            <TiltCard radius="12px" maxTilt={8}>
               <Image
                 src="/luma-logo-03.jpg"
                 alt="LUMA — verifiable by design, attested by the TEE"
@@ -45,7 +46,7 @@ export default function ProtocolTrust() {
                 height={380}
                 style={{ display: "block", width: "100%", height: "auto" }}
               />
-            </div>
+            </TiltCard>
             <div style={{ marginTop: "0.75rem", fontFamily: "var(--font-mono)", fontSize: "0.5625rem", letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--ink-30)" }}>
               verifiable by model · attested by the tee
             </div>

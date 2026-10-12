@@ -3,6 +3,7 @@
 import Image from "next/image";
 import AnimatedReveal from "@/components/primitives/AnimatedReveal";
 import Link from "next/link";
+import TiltCard from "@/components/primitives/TiltCard";
 
 const CARDS = [
   {
@@ -58,23 +59,15 @@ export default function Audience() {
         <div className="audience-grid" style={{ display: "grid", gridTemplateColumns: "1fr", gap: "1.25rem" }}>
           {CARDS.map((card) => (
             <AnimatedReveal key={card.tag}>
-              <div style={{
-                background: "var(--ivory)",
-                border: "1px solid var(--ink-10)",
-                borderRadius: "10px",
-                overflow: "hidden",
-                display: "flex",
-                flexDirection: "column",
-                boxShadow: "0 2px 16px rgba(0,0,0,0.05)",
-                transition: "box-shadow 0.25s ease, transform 0.25s ease",
-              }}
-                onMouseEnter={(e) => {
-                  (e.currentTarget as HTMLElement).style.boxShadow = "0 8px 32px rgba(30,111,255,0.10)";
-                  (e.currentTarget as HTMLElement).style.transform = "translateY(-2px)";
-                }}
-                onMouseLeave={(e) => {
-                  (e.currentTarget as HTMLElement).style.boxShadow = "0 2px 16px rgba(0,0,0,0.05)";
-                  (e.currentTarget as HTMLElement).style.transform = "translateY(0)";
+              <TiltCard
+                maxTilt={7}
+                scale={1.02}
+                radius="10px"
+                style={{
+                  background: "var(--ivory)",
+                  border: "1px solid var(--ink-10)",
+                  display: "flex",
+                  flexDirection: "column",
                 }}
               >
                 {/* Image */}
@@ -88,7 +81,7 @@ export default function Audience() {
                   />
                 </div>
 
-                {/* Content — no overlay, pure white background for readability */}
+                {/* Content */}
                 <div style={{ padding: "1.375rem 1.5rem 1.625rem", display: "flex", flexDirection: "column", gap: "0.75rem", flex: 1 }}>
                   <span style={{
                     fontFamily: "var(--font-mono)", fontSize: "0.5rem",
@@ -126,7 +119,7 @@ export default function Audience() {
                     {card.cta}
                   </Link>
                 </div>
-              </div>
+              </TiltCard>
             </AnimatedReveal>
           ))}
         </div>

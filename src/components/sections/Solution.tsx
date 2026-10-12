@@ -5,6 +5,7 @@ import AnimatedReveal from "@/components/primitives/AnimatedReveal";
 import SectionLabel from "@/components/primitives/SectionLabel";
 import Link from "next/link";
 import Divider from "@/components/primitives/Divider";
+import TiltCard from "@/components/primitives/TiltCard";
 
 export default function Solution() {
   return (
@@ -56,9 +57,9 @@ export default function Solution() {
             </AnimatedReveal>
           </div>
 
-          {/* Right: real image (image2.png) */}
+          {/* Right: image with tilt */}
           <AnimatedReveal direction="right" className="sol-img">
-            <div style={{ borderRadius: "8px", overflow: "hidden", boxShadow: "0 8px 40px rgba(10,18,50,0.12), 0 2px 8px rgba(0,0,0,0.07)", position: "relative", aspectRatio: "4/3", width: "100%", maxWidth: "100%" }}>
+            <TiltCard style={{ aspectRatio: "4/3", width: "100%", maxWidth: "100%" }}>
               <Image
                 src="/image2.png"
                 alt="Revenue flows directly from agent calls to shareholders the LUMA fix"
@@ -66,12 +67,12 @@ export default function Solution() {
                 style={{ objectFit: "cover", objectPosition: "center" }}
                 sizes="(max-width: 1024px) 100vw, 50vw"
               />
-              <div style={{ position: "absolute", bottom: "1rem", left: "1rem" }}>
+              <div style={{ position: "absolute", bottom: "1rem", left: "1rem", zIndex: 20 }}>
                 <span style={{ display: "inline-block", fontFamily: "var(--font-mono)", fontSize: "0.5625rem", letterSpacing: "0.12em", textTransform: "uppercase", color: "rgba(255,255,255,0.7)", background: "rgba(0,0,0,0.45)", backdropFilter: "blur(6px)", padding: "0.3rem 0.625rem", borderRadius: "3px" }}>
                   Fig. 02 Value tracks usage
                 </span>
               </div>
-            </div>
+            </TiltCard>
           </AnimatedReveal>
         </div>
       </div>
